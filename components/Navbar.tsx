@@ -102,6 +102,26 @@ export default function Navbar() {
             <button type="button" className="btn btn-ghost" onClick={() => goToLogin()}>{n.login}</button>
             <button type="button" className="btn btn-primary" onClick={() => goToSignup()}>{n.cta}</button>
           </div>
+          <div className="mobile-menu-lang">
+            <div className="lang-switch" role="group" aria-label="Language switcher">
+              <button
+                type="button"
+                className={lang === "en" ? "active" : ""}
+                onClick={() => setLang("en")}
+                aria-pressed={lang === "en"}
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                className={lang === "bm" ? "active" : ""}
+                onClick={() => setLang("bm")}
+                aria-pressed={lang === "bm"}
+              >
+                BM
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </header>

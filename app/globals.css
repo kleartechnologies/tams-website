@@ -1224,6 +1224,14 @@ body {
 }
 .mobile-menu-actions .btn { flex: 1; justify-content: center; }
 
+.mobile-menu-lang {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
 /* ===== FAQ interactive ===== */
 .faq-summary {
   display: flex;
@@ -1262,13 +1270,71 @@ body {
 }
 
 @media (max-width: 640px) {
+  /* Layout */
+  .container { padding: 0 16px; }
+
+  /* Navbar */
   .nav-links { display: none; }
-  .nav-cta .lang-switch, .nav-cta .btn-link, .nav-cta .btn-sm { display: none; }
+  .nav-cta { display: none; }
   .mobile-menu-btn { display: flex; }
+
+  /* Section spacing */
+  .hero { padding: 80px 0 48px; min-height: 80vh; }
+  .problem { padding: 52px 0; }
+  .features { padding: 52px 0; }
+  .preview { padding: 52px 0; }
+  .how { padding: 52px 0; }
+  .benefits { padding: 52px 0; }
+  .pricing { padding: 52px 0; }
+  .testi { padding: 52px 0; }
+  .faq { padding: 52px 0; }
+  .final-cta { padding: 64px 0; }
+  .footer { padding: 40px 0 24px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
+  .section-head { margin-bottom: 36px; }
+
+  /* Hero CTAs — stack vertically */
+  .hero-ctas { flex-direction: column; align-items: stretch; }
+  .hero-ctas .btn { width: 100%; justify-content: center; }
+  .hero-meta { gap: 12px; }
+
+  /* Features / layout */
   .features-grid { grid-template-columns: 1fr; }
   .how-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr; }
   .pkg-grid { grid-template-columns: 1fr; }
-  .tbl { font-size: 12px; }
   .dash-row { grid-template-columns: 1fr; }
+
+  /* Step cards */
+  .step { padding: 20px 12px; }
+
+  /* Preview tabs — horizontal scroll so they don't overflow */
+  .preview-tabs-wrap { overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .preview-tabs { min-width: max-content; }
+  .preview-frame { min-height: 360px; }
+
+  /* Dashboard mockup — tighten sidebar on mobile */
+  .dash-sidebar { width: 110px; }
+
+  /* Bookings table — horizontal scroll */
+  .table-mock { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tbl { min-width: 480px; font-size: 12px; }
+
+  /* Invoice — allow scroll on mobile */
+  .invoice-mock { overflow-x: auto; }
+  .invoice-paper { padding: 20px; }
+  .invoice-side { padding: 24px 20px; }
+
+  /* Pricing */
+  .pricing-grid { max-width: 100%; }
+  .plan { padding: 24px 20px; }
+
+  /* Testimonials */
+  .testi-grid { grid-template-columns: 1fr; }
+
+  /* Final CTA buttons — stack */
+  .final-cta .hero-ctas { align-items: center; }
+
+  /* Footer */
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .footer-bottom .right { flex-wrap: wrap; gap: 12px; }
 }
