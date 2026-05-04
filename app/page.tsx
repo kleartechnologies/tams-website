@@ -330,7 +330,38 @@ export default function HomePage() {
             <button type="button" className="btn btn-link" onClick={goToLogin}>{t.nav.login}</button>
             <button type="button" className="btn btn-primary btn-sm" onClick={goToSignup}>{t.nav.cta}</button>
           </div>
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              {mobileMenuOpen
+                ? <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>
+                : <><line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" /></>
+              }
+            </svg>
+          </button>
         </div>
+
+        {mobileMenuOpen && (
+          <div className="mobile-menu">
+            <a href="#features" onClick={() => setMobileMenuOpen(false)}>{t.nav.features}</a>
+            <a href="#how" onClick={() => setMobileMenuOpen(false)}>{t.nav.how}</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>{t.nav.pricing}</a>
+            <a href="#faq" onClick={() => setMobileMenuOpen(false)}>{t.nav.faq}</a>
+            <div className="mobile-menu-actions">
+              <button type="button" className="btn btn-ghost" onClick={() => { goToLogin(); setMobileMenuOpen(false); }}>{t.nav.login}</button>
+              <button type="button" className="btn btn-primary" onClick={() => { goToSignup(); setMobileMenuOpen(false); }}>{t.nav.cta}</button>
+            </div>
+            <div className="mobile-menu-lang">
+              <div className="lang-switch" role="group" aria-label="Language switcher">
+                <button type="button" className={lang === "en" ? "active" : ""} onClick={() => switchLang("en")}>EN</button>
+                <button type="button" className={lang === "bm" ? "active" : ""} onClick={() => switchLang("bm")}>BM</button>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* =================== HERO =================== */}
@@ -757,7 +788,7 @@ export default function HomePage() {
             <h2>{t.how.title}</h2>
             <p className="lead" style={{ marginTop: 14 }}>{t.how.lead}</p>
           </div>
-          <div className="how-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+          <div className="how-grid">
             {[
               { n: "1", t: t.how.s1t, d: t.how.s1d },
               { n: "2", t: t.how.s2t, d: t.how.s2d },
@@ -816,7 +847,7 @@ export default function HomePage() {
       </section>
 
       {/* =================== PRICING =================== */}
-      <section id="pricing" style={{ padding: "80px 0", background: "var(--surface-2)" }}>
+      <section className="pricing" id="pricing">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">{t.pricing.eyebrow}</span>
