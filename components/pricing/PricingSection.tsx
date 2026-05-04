@@ -52,13 +52,7 @@ const PLANS: PricingCardProps[] = [
 export default function PricingSection() {
   return (
     <div className="container">
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: 24,
-        alignItems: 'stretch',
-        paddingTop: 8,
-      }}>
+      <div className="pricing-cards-grid">
         {PLANS.map((plan) => (
           <PricingCard key={plan.title} {...plan} />
         ))}

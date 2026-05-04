@@ -240,7 +240,7 @@ body {
   padding: 100px 0 80px;
   overflow: hidden;
   background-image:
-    linear-gradient(to bottom, rgba(0,0,0,0.52), rgba(0,0,0,0.32), rgba(0,0,0,0.18)),
+    linear-gradient(to bottom, rgba(0,0,0,0.65), rgba(0,0,0,0.55), rgba(0,0,0,0.40)),
     url('/images/hero-bg.jpg');
   background-size: cover;
   background-position: center;
@@ -584,11 +584,11 @@ body {
   margin-bottom: 20px;
 }
 .trust-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  justify-items: center;
   align-items: center;
-  justify-content: center;
-  gap: 32px;
-  flex-wrap: wrap;
 }
 .trust-logo {
   display: flex;
@@ -604,6 +604,15 @@ body {
   border-radius: 5px;
   background: linear-gradient(135deg, var(--brand), var(--brand-deep));
   display: inline-block;
+}
+
+/* ===== PRICING CARDS GRID ===== */
+.pricing-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+  padding-top: 8px;
 }
 
 /* ===== SECTION HEADS ===== */
@@ -1265,8 +1274,10 @@ body {
   .benefits-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+  .pricing-cards-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
   .invoice-mock { grid-template-columns: 1fr; }
   .pkg-grid { grid-template-columns: repeat(2, 1fr); }
+  .trust-row { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 640px) {
@@ -1293,9 +1304,14 @@ body {
   .footer-grid { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
   .section-head { margin-bottom: 36px; }
 
+  /* Hero text — constrain width for readability */
+  .hero-text { max-width: 100%; }
+  .hero-text h1 { font-size: clamp(26px, 7vw, 36px); letter-spacing: -0.8px; }
+  .hero .lead { font-size: 15px; }
+
   /* Hero CTAs — stack vertically */
   .hero-ctas { flex-direction: column; align-items: stretch; }
-  .hero-ctas .btn { width: 100%; justify-content: center; }
+  .hero-ctas .btn { width: 100%; justify-content: center; min-height: 48px; }
   .hero-meta { gap: 12px; }
 
   /* Features / layout */
@@ -1331,8 +1347,20 @@ body {
   /* Testimonials */
   .testi-grid { grid-template-columns: 1fr; }
 
+  /* Trust logos — 2 column grid on small mobile */
+  .trust-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .trust { padding: 28px 0; }
+
+  /* Pricing cards — full width, centered */
+  .pricing-cards-grid { grid-template-columns: 1fr; max-width: 100%; gap: 20px; }
+
+  /* Section headings */
+  .section-head h2 { font-size: clamp(22px, 6vw, 32px); letter-spacing: -0.5px; }
+  .section-head { max-width: 100%; }
+
   /* Final CTA buttons — stack */
   .final-cta .hero-ctas { align-items: center; }
+  .final-cta h2 { font-size: clamp(24px, 6vw, 36px); }
 
   /* Footer */
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
