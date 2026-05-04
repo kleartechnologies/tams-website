@@ -1,11 +1,7 @@
 import { ROUTES } from "@/lib/routes";
 
 export function getAppUrl(): string {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-  if (!appUrl) {
-    throw new Error('NEXT_PUBLIC_APP_URL is not set');
-  }
-  return appUrl.replace(/\/$/, "");
+  return (process.env.NEXT_PUBLIC_APP_URL ?? 'https://tams-frontend.vercel.app').replace(/\/$/, '');
 }
 
 /** Navigate to /signup in the main app. */
