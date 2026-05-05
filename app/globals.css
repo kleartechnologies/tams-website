@@ -569,35 +569,38 @@ body {
 
 /* ===== TRUST ===== */
 @keyframes trust-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 .trust {
-  padding: 36px 0;
+  padding: 40px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   background: var(--surface-2);
-  overflow: hidden;
 }
 .trust-head {
   text-align: center;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
-  color: var(--ink-3);
+  color: var(--ink-4);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 24px;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
 }
 .trust-carousel-outer {
   overflow: hidden;
   width: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 .trust-carousel {
   display: flex;
-  gap: 40px;
+  align-items: center;
+  gap: 48px;
   width: max-content;
-  animation: trust-scroll 22s linear infinite;
+  animation: trust-scroll 28s linear infinite;
+  will-change: transform;
 }
 .trust-carousel:hover {
   animation-play-state: paused;
@@ -605,25 +608,25 @@ body {
 .trust-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-width: 180px;
+  gap: 10px;
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--ink-3);
-  opacity: 0.7;
+  opacity: 0.55;
   white-space: nowrap;
-  transition: opacity 0.2s;
   flex-shrink: 0;
+  transition: opacity 0.25s ease;
+  cursor: default;
+  user-select: none;
 }
 .trust-logo:hover {
   opacity: 1;
 }
 .trust-logo .mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   background: linear-gradient(135deg, var(--brand), var(--brand-deep));
-  display: inline-block;
   flex-shrink: 0;
 }
 
@@ -1369,9 +1372,9 @@ body {
   .testi-grid { grid-template-columns: 1fr; }
 
   /* Trust carousel — tighter gap and smaller logos on mobile */
-  .trust-carousel { gap: 24px; }
-  .trust-logo { min-width: 140px; font-size: 12.5px; }
-  .trust-logo .mark { width: 24px; height: 24px; border-radius: 6px; }
+  .trust-carousel { gap: 28px; }
+  .trust-logo { font-size: 12px; gap: 8px; }
+  .trust-logo .mark { width: 22px; height: 22px; border-radius: 6px; }
   .trust { padding: 28px 0; }
 
   /* Pricing cards — full width, centered */
