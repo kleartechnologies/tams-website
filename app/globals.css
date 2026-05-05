@@ -586,7 +586,7 @@ body {
   color: var(--ink-4);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 28px;
+  margin-bottom: 40px;
 }
 .trust-carousel-outer {
   overflow: hidden;
@@ -612,15 +612,17 @@ body {
   font-size: 13.5px;
   font-weight: 600;
   color: var(--ink-3);
-  opacity: 0.55;
+  opacity: 0.6;
+  filter: grayscale(1);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease, filter 0.25s ease;
   cursor: default;
   user-select: none;
 }
 .trust-logo:hover {
   opacity: 1;
+  filter: grayscale(0);
 }
 .trust-logo .mark {
   width: 28px;
@@ -1301,7 +1303,7 @@ body {
   .pricing-cards-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
   .invoice-mock { grid-template-columns: 1fr; }
   .pkg-grid { grid-template-columns: repeat(2, 1fr); }
-  .trust-carousel { gap: 32px; }
+  .trust-carousel { gap: 24px; }
 }
 
 @media (max-width: 640px) {
@@ -1372,10 +1374,11 @@ body {
   .testi-grid { grid-template-columns: 1fr; }
 
   /* Trust carousel — tighter gap and smaller logos on mobile */
-  .trust-carousel { gap: 28px; }
-  .trust-logo { font-size: 12px; gap: 8px; }
+  .trust-carousel { gap: 16px; }
+  .trust-logo { font-size: 12px; gap: 8px; min-width: 140px; }
   .trust-logo .mark { width: 22px; height: 22px; border-radius: 6px; }
   .trust { padding: 28px 0; }
+  .trust-head { margin-bottom: 24px; }
 
   /* Pricing cards — full width, centered */
   .pricing-cards-grid { grid-template-columns: 1fr; max-width: 100%; gap: 20px; }
