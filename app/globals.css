@@ -568,11 +568,17 @@ body {
 }
 
 /* ===== TRUST ===== */
+@keyframes trust-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .trust {
   padding: 36px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   background: var(--surface-2);
+  overflow: hidden;
 }
 .trust-head {
   text-align: center;
@@ -581,29 +587,44 @@ body {
   color: var(--ink-3);
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
-.trust-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  justify-items: center;
-  align-items: center;
+.trust-carousel-outer {
+  overflow: hidden;
+  width: 100%;
+}
+.trust-carousel {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: trust-scroll 22s linear infinite;
+}
+.trust-carousel:hover {
+  animation-play-state: paused;
 }
 .trust-logo {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
+  min-width: 180px;
   font-size: 13.5px;
   font-weight: 700;
   color: var(--ink-3);
+  opacity: 0.7;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+.trust-logo:hover {
+  opacity: 1;
 }
 .trust-logo .mark {
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   background: linear-gradient(135deg, var(--brand), var(--brand-deep));
   display: inline-block;
+  flex-shrink: 0;
 }
 
 /* ===== PRICING CARDS GRID ===== */
@@ -1277,7 +1298,7 @@ body {
   .pricing-cards-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
   .invoice-mock { grid-template-columns: 1fr; }
   .pkg-grid { grid-template-columns: repeat(2, 1fr); }
-  .trust-row { grid-template-columns: repeat(3, 1fr); }
+  .trust-carousel { gap: 32px; }
 }
 
 @media (max-width: 640px) {
@@ -1347,8 +1368,10 @@ body {
   /* Testimonials */
   .testi-grid { grid-template-columns: 1fr; }
 
-  /* Trust logos — 2 column grid on small mobile */
-  .trust-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  /* Trust carousel — tighter gap and smaller logos on mobile */
+  .trust-carousel { gap: 24px; }
+  .trust-logo { min-width: 140px; font-size: 12.5px; }
+  .trust-logo .mark { width: 24px; height: 24px; border-radius: 6px; }
   .trust { padding: 28px 0; }
 
   /* Pricing cards — full width, centered */
