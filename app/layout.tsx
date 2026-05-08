@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LangProvider } from "@/contexts/LangContext";
 import "./globals.css";
 
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LangProvider>
           {children}
         </LangProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
