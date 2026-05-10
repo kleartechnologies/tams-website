@@ -328,7 +328,7 @@ export default function HomePage() {
               <button type="button" className={lang === "bm" ? "active" : ""} aria-pressed={lang === "bm"} onClick={() => switchLang("bm")}>BM</button>
             </div>
             <button type="button" className="btn btn-link" onClick={goToLogin}>{t.nav.login}</button>
-            <button type="button" className="btn btn-primary btn-sm" onClick={goToSignup}>{t.nav.cta}</button>
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => goToSignup()}>{t.nav.cta}</button>
           </div>
           <button
             className="mobile-menu-btn"
@@ -377,7 +377,7 @@ export default function HomePage() {
             <h1>{t.hero.title}</h1>
             <p className="lead">{t.hero.lead}</p>
             <div className="hero-ctas">
-              <button type="button" className="btn btn-primary btn-lg" onClick={goToSignup}>
+              <button type="button" className="btn btn-primary btn-lg" onClick={() => goToSignup()}>
                 <span>{t.hero.cta1}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
               </button>
@@ -920,7 +920,7 @@ export default function HomePage() {
           <h2>{t.cta.title}</h2>
           <p>{t.cta.lead}</p>
           <div className="hero-ctas" style={{ justifyContent: "center" }}>
-            <button type="button" className="btn btn-primary btn-lg" onClick={goToSignup}>
+            <button type="button" className="btn btn-primary btn-lg" onClick={() => goToSignup()}>
               <span>{t.cta.btn1}</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </button>

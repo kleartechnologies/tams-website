@@ -28,9 +28,10 @@ const PLANS: PricingCardProps[] = [
       'Reports & analytics',
       'Priority support',
     ],
-    cta: 'Upgrade to Growth',
+    cta: 'Get Started',
     highlight: true,
     dark: false,
+    planKey: 'GROWTH',
   },
   {
     title: 'Pro',
@@ -43,9 +44,10 @@ const PLANS: PricingCardProps[] = [
       'Advanced reports',
       'Dedicated onboarding',
     ],
-    cta: 'Upgrade to Pro',
+    cta: 'Get Started',
     highlight: false,
     dark: true,
+    planKey: 'PRO',
   },
 ];
 

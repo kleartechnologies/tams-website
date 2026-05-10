@@ -2,6 +2,7 @@
 
 import { goToSignup } from '@/lib/navigation';
 
+
 const CheckIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: 11, height: 11 }}>
     <polyline points="20 6 9 17 4 12" />
@@ -17,6 +18,7 @@ export interface PricingCardProps {
   cta: string;
   highlight?: boolean;
   dark?: boolean;
+  planKey?: 'GROWTH' | 'PRO';
 }
 
 export default function PricingCard({
@@ -28,6 +30,7 @@ export default function PricingCard({
   cta,
   highlight = false,
   dark = false,
+  planKey,
 }: PricingCardProps) {
   const cardStyle: React.CSSProperties = {
     position: 'relative',
@@ -115,7 +118,7 @@ export default function PricingCard({
       <div style={{ marginTop: 'auto', paddingTop: 24 }}>
         <button
           type="button"
-          onClick={() => goToSignup()}
+          onClick={() => goToSignup(planKey)}
           style={{
             ...btnStyle,
             width: '100%',
