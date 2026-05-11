@@ -1,115 +1,115 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { goToLogin, goToSignup } from "@/lib/navigation";
-import PricingSection from "@/components/pricing/PricingSection";
 
-// ─── Translations (matches every data-i18n key in the HTML) ──────────────────
-
+// ─── Translations ─────────────────────────────────────────────────────────────
 const T = {
   en: {
     nav: { features: "Features", how: "How it works", pricing: "Pricing", faq: "FAQ", login: "Login", cta: "Start Free Trial" },
     hero: {
-      pill: "Built for Malaysian travel agencies · SST ready",
-      title: "Run Your Travel Agency Smarter",
-      lead: "Manage bookings, payments, customers, and reports — all in one system.",
+      pill: "Built for Malaysian travel agencies 🇲🇾",
+      title: "Stop managing your agency through WhatsApp & Excel",
+      lead: "TAMS helps travel agencies manage bookings, payments, customers, invoices, and reports — all in one modern system.",
       cta1: "Start Free Trial", cta2: "Book Demo",
       meta1: "7-day free trial", meta2: "No credit card required", meta3: "Cancel anytime",
-      side: { workspace: "Workspace", dashboard: "Dashboard", bookings: "Bookings", customers: "Customers", payments: "Payments", invoices: "Invoices", insights: "Insights", reports: "Reports" },
-      greeting: "Good morning, Aisha 👋",
-      kpi1: "Bookings (Apr)", kpi2: "Revenue", kpi3: "Outstanding", kpi3sub: "3 invoices",
-      chartTitle: "Revenue trend", chartRange: "Last 30 days",
-      recent: "Recent bookings",
-      float1: "Invoice paid", float2: "New booking",
+      fc1l: "Revenue", fc1v: "RM 84,000",
+      fc2l: "Bookings", fc2v: "142",
+      fc3l: "SST Ready", fc3v: "Auto-calculated",
+      fc4l: "PDF invoices", fc4v: "One-click export",
     },
-    trust: { head: "Used by travel agencies across Malaysia" },
+    trust: { head: "Trusted by travel agencies across Malaysia" },
     problem: {
-      eyebrow: "The old way", title: "Manual work is slowing your agency down",
-      lead: "If any of these feel familiar, you're spending more time on admin than on customers.",
-      p1t: "Bookings live in Excel", p1d: "Endless tabs, version conflicts, and broken formulas every busy season.",
-      p2t: "Payments tracked by hand", p2d: "Chasing deposits, matching receipts, and never quite knowing who owes what.",
-      p3t: "Customer info gets lost", p3d: "Passport numbers in WhatsApp, preferences in your head, follow-ups forgotten.",
-      p4t: "No real financial overview", p4d: "You guess at margins instead of seeing real-time revenue and outstanding balances.",
+      eyebrow: "The old way",
+      title: "Manual operations are slowing your agency down",
+      lead: "If these problems feel familiar, your team is spending too much time on admin instead of customers.",
+      p1t: "Excel chaos", p1d: "Endless tabs, version conflicts, and broken formulas every busy season.",
+      p2t: "Payment tracking nightmares", p2d: "Chasing deposits, matching receipts, never quite knowing who owes what.",
+      p3t: "WhatsApp confusion", p3d: "Passport numbers, itineraries, and approvals scattered across endless chats.",
+      p4t: "Invoice mistakes", p4d: "Wrong totals, missing SST, embarrassing typos sent to your customers.",
+      p5t: "Missing reports", p5d: "You guess at margins instead of seeing real-time revenue and outstanding balances.",
+      p6t: "Manual SST calculations", p6d: "Calculating Malaysian SST on every invoice by hand — error-prone and slow.",
     },
-    features: {
-      eyebrow: "Features", title: "Everything you need in one system",
-      lead: "From the first inquiry to the final invoice — TAMS handles the entire booking lifecycle.",
-      f1t: "Booking Management", f1d: "Create, update, and track every booking with status, dates, and assigned consultants.",
-      f2t: "Customer Management", f2d: "Keep contacts, passports, preferences, and full booking history in one searchable place.",
-      f3t: "Payment Tracking", f3d: "Log deposits, balances, and refunds. Know exactly which bookings are paid, partial, or overdue.",
-      f4t: "Invoice & PDF Generation", f4d: "Branded, SST-ready invoices generated in one click — emailed or downloaded as PDF.",
-      f5t: "Reports & Analytics", f5d: "Revenue, top destinations, outstanding payments — clear dashboards built for non-technical owners.",
-      f6t: "Multi-user & Multi-agency", f6d: "Add your team, assign roles, and manage multiple branches or agencies from one login.",
+    bento: {
+      eyebrow: "Features",
+      title: "Everything you need in one system",
+      lead: "From the first inquiry to the final invoice — TAMS handles the entire booking lifecycle so your team stays focused on customers.",
+      feat_t: "Booking Management", feat_d: "Create, update, and track every booking with status, dates, and assigned consultants. One source of truth for your entire team.",
+      cust_t: "Customer Management", cust_d: "Contacts, passports, preferences, and full booking history — searchable in one place.",
+      pay_t: "Payment Tracking", pay_d: "Log deposits, balances, and refunds. Always know who's paid, partial, or overdue.",
+      inv_t: "Invoice & PDF", inv_d: "Branded, SST-ready invoices generated in one click.",
+      rep_t: "Reports & Analytics", rep_d: "Revenue, top destinations, outstanding payments — clear dashboards built for owners.",
+      team_t: "Multi-user & Multi-agency", team_d: "Add your team, assign roles, and manage multiple branches from one login.",
     },
-    preview: {
-      eyebrow: "Product preview", title: "See how it works",
-      lead: "Real screens from TAMS — designed for travel agency teams, not IT departments.",
-      tab1: "Dashboard", tab2: "Bookings", tab3: "Packages", tab4: "Invoice",
-      dashTitle: "Dashboard overview", topTitle: "Top destinations",
-      bookingsTitle: "Bookings", bookingsSearch: "Search bookings…", bookingsNew: "+ New booking",
-      bH1: "Customer", bH2: "Destination", bH3: "Dates", bH4: "Total", bH5: "Status",
-      paid: "Paid", pending: "Pending", draft: "Draft",
-      packagesTitle: "Travel Packages", packagesSearch: "Search packages…", packagesNew: "+ New package",
-      from: "From", pax: "/ pax",
-      invTitle: "Branded invoices, instantly.",
-      invLead: "One click to generate a professional, SST-compliant invoice — ready to email or download as PDF.",
-      invNum: "Invoice number", invStatus: "Status", invStatusPaid: "✓ Paid",
-      invSst: "SST (8%)", invTotal: "Total", invHeading: "Invoice",
-      invIssued: "Issued 22 Apr 2026", invBilled: "Billed to",
-      invDesc: "Description", invQty: "Qty", invAmt: "Amount",
-      invSubtotal: "Subtotal", invLine1: "Bali Holiday Package · 5D4N",
-      invLine2: "Travel Insurance Add-on", invLine3: "Airport Transfer (Return)",
+    show: {
+      eyebrow: "Inside TAMS",
+      title: "A real product, shipping every day",
+      lead: "Every screen below reflects the live TAMS application — built for Malaysian travel agencies.",
+      a_tag: "Bookings", a_t: "Manage bookings without spreadsheets",
+      a_d: "Track inquiries, confirmations, payments, departures, and customer balances in one clean workflow.",
+      a_b1: "Status pipeline — Inquiry → Quoted → Confirmed → Completed",
+      a_b2: "Live balance & payment status per booking",
+      a_b3: "Search across customers, package, booking no.",
+      b_tag: "Packages", b_t: "Create and manage travel packages easily",
+      b_d: "Handle Umrah, group tours, honeymoon packages, pricing, and departures in one place.",
+      b_b1: "Adult & child pricing per package",
+      b_b2: "Next-departure tracking at a glance",
+      b_b3: "Umrah, Group Tour, Private Tour types",
+      c_tag: "Invoices", c_t: "Generate professional invoices instantly",
+      c_d: "Create branded invoices with SST calculations, payment tracking, and downloadable PDFs.",
+      c_b1: "Auto SST 6% — no manual math",
+      c_b2: "Account summary & balance due",
+      c_b3: "One-click PDF export",
+      d_tag: "Confirmations", d_t: "Professional booking confirmations for customers",
+      d_d: "Automatically generate polished booking confirmations your customers can trust.",
+      d_b1: "Traveller list with IC & pricing",
+      d_b2: "Branded header with agency identity",
+      d_b3: "Customer-ready PDF in one click",
     },
-    how: {
-      eyebrow: "How it works", title: "Get started in minutes",
-      lead: "No setup calls, no IT team required.",
-      s1t: "Create account", s1d: "Sign up in two minutes — no credit card required.",
-      s2t: "Add packages", s2d: "Build reusable Umrah, holiday, and corporate packages.",
-      s3t: "Start managing bookings", s3d: "Take bookings, log payments, and send invoices instantly.",
+    uc: {
+      eyebrow: "Built for every kind of trip",
+      title: "From Umrah to corporate travel",
+      lead: "TAMS adapts to how your agency actually works — across faith, leisure, and corporate segments.",
+      umrah_tag: "Umrah & Hajj", umrah_t: "Faith-based travel",
+      umrah_d: "Manage Umrah and Hajj groups with passport tracking, visa workflows, and group-level invoicing.",
+      tour_tag: "Leisure & Holidays", tour_t: "Holiday packages",
+      tour_d: "Reusable family, honeymoon, and group itineraries — Bali, Tokyo, Korea, Istanbul, and beyond.",
+      corp_tag: "Corporate", corp_t: "Business travel",
+      corp_d: "Handle corporate accounts, multiple travelers per booking, and company-billed invoices effortlessly.",
     },
     benefits: {
-      eyebrow: "Why TAMS", title: "Why agencies choose TAMS",
-      lead: "Stop juggling spreadsheets. Run a tighter operation with everything in one place.",
+      eyebrow: "Why TAMS",
+      title: "Why agencies choose TAMS",
+      lead: "Stop juggling spreadsheets, sticky notes, and WhatsApp threads. Run a tighter operation with everything in one place.",
       b1t: "Save hours of admin work", b1d: "Automate invoices, reminders, and reports your team writes by hand today.",
       b2t: "Reduce booking errors", b2d: "One source of truth means no more conflicting versions or missed details.",
       b3t: "Track payments easily", b3d: "Know who has paid what, when — and what's outstanding — in real time.",
       b4t: "Look professional", b4d: "Branded, SST-compliant invoices that build trust with every customer.",
-      qEyebrow: "Trusted by Malaysian agencies",
-      qText: "\"We used to lose two full days a month reconciling bookings and invoices. With TAMS, that's done in an afternoon.\"",
-      qRole: "Owner · Pelangi Tours, Shah Alam",
-      stat1n: "12hrs", stat1l: "saved per week", stat2n: "98%", stat2l: "invoice accuracy",
     },
     pricing: {
-      eyebrow: "Pricing", title: "Simple pricing for travel agencies",
+      eyebrow: "Pricing",
+      title: "Simple pricing for travel agencies",
       lead: "Designed for Malaysian travel agencies. Transparent monthly pricing — no setup fees, no hidden costs.",
-      basicName: "Basic", basicTag: "For small agencies getting started", basicPeriod: "/ month",
-      basicF1: "Up to 100 bookings / month", basicF2: "Customer management",
-      basicF3: "Booking management", basicF4: "Basic invoice generation", basicF5: "Email support",
-      basicCta: "Start Free Trial",
+      basic_name: "Basic", basic_tag: "For small agencies getting started",
+      basic_f1: "Up to 100 bookings / month", basic_f2: "Customer management",
+      basic_f3: "Booking management", basic_f4: "Basic invoice generation", basic_f5: "Email support",
+      basic_cta: "Start Free Trial",
       badge: "Most popular",
-      proName: "Pro", proTag: "For growing agencies that want full control", proPeriod: "/ month",
-      proF1: "Everything in Basic", proF2: "Unlimited bookings", proF3: "Payment tracking & SST support",
-      proF4: "Reports & analytics", proF5: "PDF invoice & export",
-      proF6: "Multi-user / multi-agency", proF7: "Priority support",
-      proCta: "Start Free Trial",
+      pro_name: "Pro", pro_tag: "For growing agencies that want full control",
+      pro_f1: "Everything in Basic", pro_f2: "Unlimited bookings",
+      pro_f3: "Payment tracking & SST support", pro_f4: "Reports & analytics",
+      pro_f5: "PDF invoice & export", pro_f6: "Multi-user / multi-agency", pro_f7: "Priority support",
+      pro_cta: "Start Free Trial",
       note: "Designed for Malaysian travel agencies · SST ready · Cancel anytime",
-    },
-    testi: {
-      eyebrow: "Customer stories", title: "Loved by travel agencies across Malaysia",
-      q1: "\"Our team picked it up in an afternoon. Bookings, invoices, and SST are no longer a headache.\"",
-      n1: "Aisha Rahman", r1: "Owner · Pelangi Tours, Shah Alam",
-      q2: "\"We run Umrah and leisure packages side by side. TAMS handles both without us forcing it.\"",
-      n2: "Encik Hafiz", r2: "Director · Barakah Travel, Penang",
-      q3: "\"The invoice generator alone saves us a full day every month. Worth it.\"",
-      n3: "Mei Chen", r3: "Operations · Voyageur Travel, KL",
     },
     faq: {
       eyebrow: "FAQ", title: "Frequently asked questions",
-      q1: "Do I need to install anything?", a1: "No. TAMS runs entirely in your browser.",
-      q2: "Can I cancel anytime?", a2: "Yes. There are no contracts or lock-ins.",
-      q3: "Is SST supported?", a3: "Yes. TAMS includes built-in Malaysian SST support.",
-      q4: "Can multiple staff use one account?", a4: "Yes. Pro plan supports multiple users with role-based permissions.",
-      q5: "Is this suitable for small agencies?", a5: "Yes. The Basic plan is built specifically for agencies just getting started.",
+      q1: "Do I need to install anything?", a1: "No. TAMS runs entirely in your browser. Just sign up, log in, and start managing your agency — no downloads, no plugins, no servers to maintain.",
+      q2: "Can I cancel anytime?", a2: "Yes. There are no contracts or lock-ins. Cancel from your account settings anytime and you won't be billed again.",
+      q3: "Is SST supported?", a3: "Yes. TAMS includes built-in Malaysian SST support. Configure your rate once and it applies to invoices and reports automatically.",
+      q4: "Can multiple staff use one account?", a4: "Yes. The Pro plan supports multiple users with role-based permissions, so your consultants, finance team, and managers each see what they need.",
+      q5: "Is this suitable for small agencies?", a5: "TAMS is designed for solo operators and small teams as much as growing agencies. The Basic plan is built specifically for agencies just getting started.",
     },
     cta: {
       title: "Ready to grow your travel agency?",
@@ -118,7 +118,7 @@ const T = {
       note: "No credit card required · 7-day free trial",
     },
     footer: {
-      tag: "The modern operating system for Malaysian travel agencies.",
+      tag: "The modern operating system for Malaysian travel agencies — bookings, customers, payments, and invoices in one clean place.",
       product: "Product", company: "Company", resources: "Resources",
       changelog: "Changelog", about: "About", customers: "Customers",
       contact: "Contact", careers: "Careers", help: "Help center",
@@ -130,106 +130,107 @@ const T = {
   bm: {
     nav: { features: "Ciri-ciri", how: "Cara guna", pricing: "Harga", faq: "Soalan Lazim", login: "Log Masuk", cta: "Cuba Percuma" },
     hero: {
-      pill: "Direka untuk agensi pelancongan Malaysia · Sokong SST",
-      title: "Urus Agensi Pelancongan Anda Dengan Lebih Bijak",
-      lead: "Urus tempahan, pembayaran, pelanggan dan laporan dalam satu sistem.",
+      pill: "Direka untuk agensi pelancongan Malaysia 🇲🇾",
+      title: "Berhenti urus agensi anda melalui WhatsApp & Excel",
+      lead: "TAMS membantu agensi pelancongan urus tempahan, pembayaran, pelanggan, invois, dan laporan — semua dalam satu sistem moden.",
       cta1: "Cuba Percuma", cta2: "Tempah Demo",
       meta1: "Percubaan 7 hari", meta2: "Tiada kad kredit diperlukan", meta3: "Batal bila-bila masa",
-      side: { workspace: "Ruang Kerja", dashboard: "Papan Pemuka", bookings: "Tempahan", customers: "Pelanggan", payments: "Pembayaran", invoices: "Invois", insights: "Statistik", reports: "Laporan" },
-      greeting: "Selamat pagi, Aisha 👋",
-      kpi1: "Tempahan (Apr)", kpi2: "Pendapatan", kpi3: "Tertunggak", kpi3sub: "3 invois",
-      chartTitle: "Aliran pendapatan", chartRange: "30 hari lepas",
-      recent: "Tempahan terkini",
-      float1: "Invois dibayar", float2: "Tempahan baru",
+      fc1l: "Pendapatan", fc1v: "RM 84,000",
+      fc2l: "Tempahan", fc2v: "142",
+      fc3l: "Sokong SST", fc3v: "Dikira automatik",
+      fc4l: "Invois PDF", fc4v: "Eksport sekali klik",
     },
     trust: { head: "Dipercayai oleh agensi pelancongan di seluruh Malaysia" },
     problem: {
-      eyebrow: "Cara lama", title: "Kerja manual melambatkan operasi agensi anda",
-      lead: "Jika anda kenal masalah ini, anda sebenarnya menghabiskan lebih banyak masa pada kerja pentadbiran berbanding melayan pelanggan.",
-      p1t: "Tempahan dalam Excel", p1d: "Banyak tab, fail bercanggah, dan formula rosak setiap musim sibuk.",
-      p2t: "Pembayaran direkod manual", p2d: "Mengejar deposit, menyemak resit, dan tidak pasti siapa berhutang berapa.",
-      p3t: "Maklumat pelanggan hilang", p3d: "Nombor pasport dalam WhatsApp, citarasa dalam ingatan, susulan terlupa.",
-      p4t: "Tiada gambaran kewangan jelas", p4d: "Anda hanya meneka margin, tanpa pendapatan dan baki tertunggak masa nyata.",
+      eyebrow: "Cara lama",
+      title: "Operasi manual melambatkan agensi anda",
+      lead: "Jika masalah ini terasa biasa, pasukan anda menghabiskan terlalu banyak masa pada kerja pentadbiran berbanding pelanggan.",
+      p1t: "Kekacauan Excel", p1d: "Banyak tab, fail bercanggah, dan formula rosak setiap musim sibuk.",
+      p2t: "Sukar jejak pembayaran", p2d: "Mengejar deposit, menyemak resit, dan tidak tahu siapa berhutang berapa.",
+      p3t: "Kekeliruan WhatsApp", p3d: "Nombor pasport, itinerari, dan kelulusan bertaburan dalam banyak sembang.",
+      p4t: "Kesilapan invois", p4d: "Jumlah salah, SST tertinggal, kesilapan taip yang memalukan dihantar kepada pelanggan.",
+      p5t: "Tiada laporan", p5d: "Anda hanya meneka margin tanpa melihat pendapatan dan baki tertunggak masa nyata.",
+      p6t: "Kira SST secara manual", p6d: "Mengira SST Malaysia pada setiap invois secara manual — rawan kesilapan dan lambat.",
     },
-    features: {
-      eyebrow: "Ciri-ciri", title: "Semua yang anda perlukan dalam satu sistem",
-      lead: "Dari pertanyaan pertama hingga invois akhir — TAMS menguruskan keseluruhan kitaran tempahan.",
-      f1t: "Pengurusan Tempahan", f1d: "Cipta, kemas kini dan jejaki setiap tempahan dengan status, tarikh dan perunding bertugas.",
-      f2t: "Pengurusan Pelanggan", f2d: "Simpan kenalan, pasport, citarasa dan sejarah tempahan dalam satu tempat yang mudah dicari.",
-      f3t: "Pemantauan Pembayaran", f3d: "Rekod deposit, baki dan bayaran balik. Tahu tempahan mana telah dibayar penuh atau tertunggak.",
-      f4t: "Penjanaan Invois & PDF", f4d: "Invois berjenama, mematuhi SST, dijana sekali klik — emel atau muat turun sebagai PDF.",
-      f5t: "Laporan & Analitik", f5d: "Pendapatan, destinasi popular, bayaran tertunggak — papan pemuka jelas untuk pemilik bukan teknikal.",
-      f6t: "Pelbagai pengguna & agensi", f6d: "Tambah pasukan, tetapkan peranan, dan urus beberapa cawangan atau agensi dari satu log masuk.",
+    bento: {
+      eyebrow: "Ciri-ciri",
+      title: "Semua yang anda perlukan dalam satu sistem",
+      lead: "Dari pertanyaan pertama hingga invois akhir — TAMS menguruskan keseluruhan kitaran tempahan supaya pasukan anda fokus pada pelanggan.",
+      feat_t: "Pengurusan Tempahan", feat_d: "Cipta, kemas kini dan jejaki setiap tempahan dengan status, tarikh dan perunding. Satu sumber kebenaran untuk seluruh pasukan.",
+      cust_t: "Pengurusan Pelanggan", cust_d: "Kenalan, pasport, citarasa, dan sejarah tempahan penuh — mudah dicari di satu tempat.",
+      pay_t: "Pemantauan Pembayaran", pay_d: "Rekod deposit, baki dan bayaran balik. Sentiasa tahu siapa telah bayar, sebahagian, atau tertunggak.",
+      inv_t: "Invois & PDF", inv_d: "Invois berjenama, siap SST, dijana sekali klik.",
+      rep_t: "Laporan & Analitik", rep_d: "Pendapatan, destinasi popular, bayaran tertunggak — papan pemuka jelas untuk pemilik.",
+      team_t: "Pelbagai Pengguna & Agensi", team_d: "Tambah pasukan, tetapkan peranan, dan urus beberapa cawangan dari satu log masuk.",
     },
-    preview: {
-      eyebrow: "Pratonton produk", title: "Lihat bagaimana ia berfungsi",
-      lead: "Skrin sebenar daripada TAMS — direka untuk pasukan agensi pelancongan, bukan jabatan IT.",
-      tab1: "Papan Pemuka", tab2: "Tempahan", tab3: "Pakej", tab4: "Invois",
-      dashTitle: "Ringkasan papan pemuka", topTitle: "Destinasi popular",
-      bookingsTitle: "Tempahan", bookingsSearch: "Cari tempahan…", bookingsNew: "+ Tempahan baru",
-      bH1: "Pelanggan", bH2: "Destinasi", bH3: "Tarikh", bH4: "Jumlah", bH5: "Status",
-      paid: "Dibayar", pending: "Menunggu", draft: "Draf",
-      packagesTitle: "Pakej Pelancongan", packagesSearch: "Cari pakej…", packagesNew: "+ Pakej baru",
-      from: "Dari", pax: "/ org",
-      invTitle: "Invois berjenama, serta-merta.",
-      invLead: "Sekali klik untuk menjana invois profesional yang mematuhi SST — sedia diemel atau dimuat turun sebagai PDF.",
-      invNum: "Nombor invois", invStatus: "Status", invStatusPaid: "✓ Dibayar",
-      invSst: "SST (8%)", invTotal: "Jumlah", invHeading: "Invois",
-      invIssued: "Dikeluarkan 22 Apr 2026", invBilled: "Diakaunkan kepada",
-      invDesc: "Keterangan", invQty: "Kuantiti", invAmt: "Jumlah",
-      invSubtotal: "Subjumlah", invLine1: "Pakej Percutian Bali · 5H4M",
-      invLine2: "Tambahan Insurans Pelancongan", invLine3: "Pengangkutan Lapangan Terbang (Pergi-Balik)",
+    show: {
+      eyebrow: "Di dalam TAMS",
+      title: "Produk sebenar, dihantar setiap hari",
+      lead: "Setiap skrin di bawah mencerminkan aplikasi TAMS yang aktif — dibina untuk agensi pelancongan Malaysia.",
+      a_tag: "Tempahan", a_t: "Urus tempahan tanpa spreadsheet",
+      a_d: "Jejaki pertanyaan, pengesahan, pembayaran, berlepas, dan baki pelanggan dalam satu aliran kerja yang kemas.",
+      a_b1: "Saluran status — Pertanyaan → Sebut Harga → Disahkan → Selesai",
+      a_b2: "Baki dan status pembayaran secara langsung bagi setiap tempahan",
+      a_b3: "Cari mengikut pelanggan, pakej, nombor tempahan.",
+      b_tag: "Pakej", b_t: "Cipta dan urus pakej pelancongan dengan mudah",
+      b_d: "Urus Umrah, lawatan berkumpulan, pakej bulan madu, harga, dan berlepas di satu tempat.",
+      b_b1: "Harga dewasa & kanak-kanak bagi setiap pakej",
+      b_b2: "Jejak tarikh berlepas seterusnya sekilas pandang",
+      b_b3: "Jenis Umrah, Lawatan Berkumpulan, Lawatan Persendirian",
+      c_tag: "Invois", c_t: "Jana invois profesional serta-merta",
+      c_d: "Buat invois berjenama dengan pengiraan SST, penjejakan pembayaran, dan PDF yang boleh dimuat turun.",
+      c_b1: "SST automatik 6% — tiada matematik manual",
+      c_b2: "Ringkasan akaun & baki kena bayar",
+      c_b3: "Eksport PDF sekali klik",
+      d_tag: "Pengesahan", d_t: "Pengesahan tempahan profesional untuk pelanggan",
+      d_d: "Jana pengesahan tempahan yang sempurna secara automatik yang boleh dipercayai oleh pelanggan anda.",
+      d_b1: "Senarai pengembara dengan IC & harga",
+      d_b2: "Pengepala berjenama dengan identiti agensi",
+      d_b3: "PDF sedia pelanggan sekali klik",
     },
-    how: {
-      eyebrow: "Cara guna", title: "Mula dalam beberapa minit",
-      lead: "Tiada panggilan persediaan, tiada pasukan IT diperlukan.",
-      s1t: "Daftar akaun", s1d: "Daftar dalam dua minit — tanpa kad kredit.",
-      s2t: "Tambah pakej", s2d: "Bina pakej Umrah, percutian dan korporat yang boleh digunakan semula.",
-      s3t: "Mula urus tempahan", s3d: "Terima tempahan, rekod pembayaran, dan hantar invois serta-merta.",
+    uc: {
+      eyebrow: "Dibina untuk setiap jenis perjalanan",
+      title: "Dari Umrah hingga perjalanan korporat",
+      lead: "TAMS menyesuaikan diri dengan cara agensi anda benar-benar beroperasi — merentas segmen keagamaan, sukan dan korporat.",
+      umrah_tag: "Umrah & Haji", umrah_t: "Pelancongan berasaskan iman",
+      umrah_d: "Urus kumpulan Umrah dan Haji dengan penjejakan pasport, aliran kerja visa, dan penginvoisan peringkat kumpulan.",
+      tour_tag: "Sukan & Percutian", tour_t: "Pakej percutian",
+      tour_d: "Itinerari keluarga, bulan madu, dan berkumpulan yang boleh digunakan semula — Bali, Tokyo, Korea, Istanbul dan banyak lagi.",
+      corp_tag: "Korporat", corp_t: "Perjalanan perniagaan",
+      corp_d: "Urus akaun korporat, berbilang pengembara setiap tempahan, dan invois bil syarikat dengan mudah.",
     },
     benefits: {
-      eyebrow: "Kenapa TAMS", title: "Kenapa agensi memilih TAMS",
-      lead: "Berhenti bergelut dengan spreadsheet. Jalankan operasi yang lebih kemas dengan semuanya di satu tempat.",
+      eyebrow: "Kenapa TAMS",
+      title: "Kenapa agensi memilih TAMS",
+      lead: "Berhenti bergelut dengan spreadsheet, nota melekit, dan benang WhatsApp. Jalankan operasi yang lebih kemas dengan semuanya di satu tempat.",
       b1t: "Jimat berjam-jam kerja pentadbiran", b1d: "Automasikan invois, peringatan dan laporan yang ditulis manual hari ini.",
       b2t: "Kurangkan kesilapan tempahan", b2d: "Satu sumber kebenaran — tiada lagi versi bercanggah atau butiran terlepas.",
       b3t: "Pantau pembayaran dengan mudah", b3d: "Tahu siapa bayar berapa, bila — dan apa yang tertunggak — secara masa nyata.",
       b4t: "Tampak profesional", b4d: "Invois berjenama yang mematuhi SST dan membina kepercayaan dengan setiap pelanggan.",
-      qEyebrow: "Dipercayai agensi Malaysia",
-      qText: "\"Dulu kami hilang dua hari sebulan untuk semak tempahan dan invois. Dengan TAMS, semua siap satu petang.\"",
-      qRole: "Pemilik · Pelangi Tours, Shah Alam",
-      stat1n: "12 jam", stat1l: "dijimatkan seminggu", stat2n: "98%", stat2l: "ketepatan invois",
     },
     pricing: {
-      eyebrow: "Harga", title: "Harga mudah untuk agensi pelancongan",
+      eyebrow: "Harga",
+      title: "Harga mudah untuk agensi pelancongan",
       lead: "Direka untuk agensi pelancongan Malaysia. Harga bulanan telus — tiada yuran pemasangan, tiada kos tersembunyi.",
-      basicName: "Basic", basicTag: "Untuk agensi kecil yang baru bermula", basicPeriod: "/ bulan",
-      basicF1: "Sehingga 100 tempahan / bulan", basicF2: "Pengurusan pelanggan",
-      basicF3: "Pengurusan tempahan", basicF4: "Penjanaan invois asas", basicF5: "Sokongan emel",
-      basicCta: "Cuba Percuma",
+      basic_name: "Basic", basic_tag: "Untuk agensi kecil yang baru bermula",
+      basic_f1: "Sehingga 100 tempahan / bulan", basic_f2: "Pengurusan pelanggan",
+      basic_f3: "Pengurusan tempahan", basic_f4: "Penjanaan invois asas", basic_f5: "Sokongan emel",
+      basic_cta: "Cuba Percuma",
       badge: "Paling popular",
-      proName: "Pro", proTag: "Untuk agensi yang berkembang dan mahukan kawalan penuh", proPeriod: "/ bulan",
-      proF1: "Semua dalam Basic", proF2: "Tempahan tanpa had", proF3: "Pemantauan pembayaran & SST",
-      proF4: "Laporan & analitik", proF5: "Invois PDF & eksport",
-      proF6: "Pelbagai pengguna / agensi", proF7: "Sokongan keutamaan",
-      proCta: "Cuba Percuma",
+      pro_name: "Pro", pro_tag: "Untuk agensi yang berkembang dan mahukan kawalan penuh",
+      pro_f1: "Semua dalam Basic", pro_f2: "Tempahan tanpa had",
+      pro_f3: "Pemantauan pembayaran & SST", pro_f4: "Laporan & analitik",
+      pro_f5: "Invois PDF & eksport", pro_f6: "Pelbagai pengguna / agensi", pro_f7: "Sokongan keutamaan",
+      pro_cta: "Cuba Percuma",
       note: "Direka untuk agensi pelancongan Malaysia · Sokong SST · Batal bila-bila masa",
-    },
-    testi: {
-      eyebrow: "Kisah pelanggan", title: "Disayangi agensi pelancongan di seluruh Malaysia",
-      q1: "\"Pasukan kami faham gunanya dalam satu petang. Tempahan, invois dan SST tidak lagi memeningkan.\"",
-      n1: "Aisha Rahman", r1: "Pemilik · Pelangi Tours, Shah Alam",
-      q2: "\"Kami uruskan pakej Umrah dan percutian serentak. TAMS sokong kedua-duanya tanpa masalah.\"",
-      n2: "Encik Hafiz", r2: "Pengarah · Barakah Travel, Pulau Pinang",
-      q3: "\"Penjana invois sahaja menjimatkan satu hari penuh setiap bulan. Sangat berbaloi.\"",
-      n3: "Mei Chen", r3: "Operasi · Voyageur Travel, KL",
     },
     faq: {
       eyebrow: "Soalan Lazim", title: "Soalan yang sering ditanya",
-      q1: "Adakah saya perlu memasang apa-apa?", a1: "Tidak. TAMS berjalan sepenuhnya dalam pelayar anda.",
-      q2: "Bolehkah saya batalkan bila-bila masa?", a2: "Boleh. Tiada kontrak atau ikatan.",
-      q3: "Adakah SST disokong?", a3: "Ya. TAMS menyokong SST Malaysia secara terbina.",
-      q4: "Bolehkah beberapa kakitangan guna satu akaun?", a4: "Boleh. Pelan Pro menyokong pelbagai pengguna dengan kebenaran berdasarkan peranan.",
-      q5: "Sesuaikah untuk agensi kecil?", a5: "Ya. Pelan Basic dibina khas untuk agensi yang baru bermula.",
+      q1: "Adakah saya perlu memasang apa-apa?", a1: "Tidak. TAMS berjalan sepenuhnya dalam pelayar anda. Daftar, log masuk, dan mula mengurus agensi anda — tanpa muat turun, tanpa pemalam, tanpa pelayan untuk diselenggara.",
+      q2: "Bolehkah saya batalkan bila-bila masa?", a2: "Boleh. Tiada kontrak atau ikatan. Batalkan dari tetapan akaun anda bila-bila masa dan anda tidak akan dikenakan bil lagi.",
+      q3: "Adakah SST disokong?", a3: "Ya. TAMS menyokong SST Malaysia secara terbina. Tetapkan kadar anda sekali dan ia akan digunakan pada invois dan laporan secara automatik.",
+      q4: "Bolehkah beberapa kakitangan guna satu akaun?", a4: "Boleh. Pelan Pro menyokong pelbagai pengguna dengan kebenaran berdasarkan peranan, supaya perunding, pasukan kewangan dan pengurus masing-masing melihat apa yang mereka perlukan.",
+      q5: "Sesuaikah untuk agensi kecil?", a5: "TAMS direka untuk pengendali solo dan pasukan kecil sepertimana agensi yang sedang berkembang. Pelan Basic dibina khas untuk agensi yang baru bermula.",
     },
     cta: {
       title: "Bersedia untuk mengembangkan agensi anda?",
@@ -238,7 +239,7 @@ const T = {
       note: "Tiada kad kredit · Percubaan 7 hari",
     },
     footer: {
-      tag: "Sistem operasi moden untuk agensi pelancongan Malaysia.",
+      tag: "Sistem operasi moden untuk agensi pelancongan Malaysia — tempahan, pelanggan, pembayaran, dan invois dalam satu tempat yang kemas.",
       product: "Produk", company: "Syarikat", resources: "Sumber",
       changelog: "Log Perubahan", about: "Tentang Kami", customers: "Pelanggan",
       contact: "Hubungi", careers: "Kerjaya", help: "Pusat Bantuan",
@@ -251,39 +252,47 @@ const T = {
 
 type Lang = keyof typeof T;
 
-// ─── SVG helpers ──────────────────────────────────────────────────────────────
-
-const Check14 = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+// ─── SVG Icons ────────────────────────────────────────────────────────────────
+const CheckSm = () => (
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
-
-const Star = () => (
-  <svg viewBox="0 0 24 24">
-    <path d="M12 2l2.39 6.96H22l-6.18 4.49L18.18 22 12 17.27 5.82 22l2.36-8.55L2 8.96h7.61z" />
-  </svg>
-);
-
-const PlusIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+const Plus = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
     <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 );
 
-const CheckSm = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
+// ─── FAQ Item ─────────────────────────────────────────────────────────────────
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="faq-item">
+      <button className="faq-summary" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <span>{q}</span>
+        <span className={`faq-icon${open ? " open" : ""}`}><Plus /></span>
+      </button>
+      {open && <div className="faq-body">{a}</div>}
+    </div>
+  );
+}
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── CheckBullet helper ───────────────────────────────────────────────────────
+function CheckBullet({ text }: { text: string }) {
+  return (
+    <li>
+      <span className="show-bullet-check"><CheckSm /></span>
+      <span>{text}</span>
+    </li>
+  );
+}
 
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function HomePage() {
   const [lang, setLangState] = useState<Lang>("en");
   const [scrolled, setScrolled] = useState(false);
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("tams-lang") as Lang | null;
@@ -291,487 +300,543 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  function switchLang(l: Lang) {
-    setLangState(l);
-    localStorage.setItem("tams-lang", l);
-  }
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }),
+      { threshold: 0.10 }
+    );
+    document.querySelectorAll(".reveal, .reveal-stagger").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  function switchLang(l: Lang) { setLangState(l); localStorage.setItem("tams-lang", l); }
 
   const t = T[lang];
 
   return (
     <>
-      {/* =================== NAV =================== */}
-      <header className={`nav${scrolled ? " scrolled" : ""}`} id="nav">
-        <div className="container nav-inner">
-          <a className="brand" href="#">
-            <div className="logo">T</div>
-            <div className="brand-text">
-              <span className="brand-name">TAMS</span>
-              <span className="brand-tag">Travel Agency Management System</span>
-            </div>
+      {/* ═══════════════════════════════════════ NAV ═══════════════════════════════════════ */}
+      <header className={`nav-wrap${scrolled ? " scrolled" : ""}`}>
+        <div className="container nav">
+          <a href="#" className="brand">
+            <span className="brand-mark">T</span>
+            <span>TAMS</span>
           </a>
+
           <nav className="nav-links">
             <a href="#features">{t.nav.features}</a>
-            <a href="#how">{t.nav.how}</a>
+            <a href="#showcase">{t.nav.how}</a>
             <a href="#pricing">{t.nav.pricing}</a>
             <a href="#faq">{t.nav.faq}</a>
           </nav>
-          <div className="nav-cta">
-            <div className="lang-switch" role="group" aria-label="Language switcher">
-              <button type="button" className={lang === "en" ? "active" : ""} aria-pressed={lang === "en"} onClick={() => switchLang("en")}>EN</button>
-              <button type="button" className={lang === "bm" ? "active" : ""} aria-pressed={lang === "bm"} onClick={() => switchLang("bm")}>BM</button>
+
+          <div className="nav-right">
+            <div className="lang-toggle" role="group" aria-label="Language">
+              <button type="button" className={lang === "en" ? "active" : ""} onClick={() => switchLang("en")}>EN</button>
+              <button type="button" className={lang === "bm" ? "active" : ""} onClick={() => switchLang("bm")}>BM</button>
             </div>
-            <button type="button" className="btn btn-link" onClick={goToLogin}>{t.nav.login}</button>
+            <button type="button" className="nav-link-login" onClick={goToLogin}>{t.nav.login}</button>
             <button type="button" className="btn btn-primary btn-sm" onClick={() => goToSignup()}>{t.nav.cta}</button>
           </div>
+
           <button
-            className="mobile-menu-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            type="button"
+            className={`nav-burger${mobileOpen ? " open" : ""}`}
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen(!mobileOpen)}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              {mobileMenuOpen
-                ? <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>
-                : <><line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" /></>
-              }
-            </svg>
+            <span /><span /><span />
           </button>
         </div>
 
-        {mobileMenuOpen && (
-          <div className="mobile-menu">
-            <a href="#features" onClick={() => setMobileMenuOpen(false)}>{t.nav.features}</a>
-            <a href="#how" onClick={() => setMobileMenuOpen(false)}>{t.nav.how}</a>
-            <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>{t.nav.pricing}</a>
-            <a href="#faq" onClick={() => setMobileMenuOpen(false)}>{t.nav.faq}</a>
-            <div className="mobile-menu-actions">
-              <button type="button" className="btn btn-ghost" onClick={() => { goToLogin(); setMobileMenuOpen(false); }}>{t.nav.login}</button>
-              <button type="button" className="btn btn-primary" onClick={() => { goToSignup(); setMobileMenuOpen(false); }}>{t.nav.cta}</button>
-            </div>
-            <div className="mobile-menu-lang">
-              <div className="lang-switch" role="group" aria-label="Language switcher">
-                <button type="button" className={lang === "en" ? "active" : ""} onClick={() => switchLang("en")}>EN</button>
-                <button type="button" className={lang === "bm" ? "active" : ""} onClick={() => switchLang("bm")}>BM</button>
-              </div>
+        <div className={`mobile-drawer${mobileOpen ? " open" : ""}`}>
+          <a href="#features" onClick={() => setMobileOpen(false)}>{t.nav.features}</a>
+          <a href="#showcase" onClick={() => setMobileOpen(false)}>{t.nav.how}</a>
+          <a href="#pricing" onClick={() => setMobileOpen(false)}>{t.nav.pricing}</a>
+          <a href="#faq" onClick={() => setMobileOpen(false)}>{t.nav.faq}</a>
+          <div className="drawer-divider" />
+          <div className="drawer-lang">
+            <span>{t.footer.lang}</span>
+            <div className="lang-toggle">
+              <button type="button" className={lang === "en" ? "active" : ""} onClick={() => switchLang("en")}>EN</button>
+              <button type="button" className={lang === "bm" ? "active" : ""} onClick={() => switchLang("bm")}>BM</button>
             </div>
           </div>
-        )}
+          <button type="button" className="drawer-login" onClick={() => { goToLogin(); setMobileOpen(false); }}>{t.nav.login}</button>
+          <button type="button" className="btn btn-blue btn-lg drawer-cta" onClick={() => { goToSignup(); setMobileOpen(false); }}>{t.nav.cta}</button>
+        </div>
       </header>
 
-      {/* =================== HERO =================== */}
+      {/* ═══════════════════════════════════════ HERO ══════════════════════════════════════ */}
       <section className="hero">
         <div className="container hero-grid">
-          <div className="hero-text">
-            <span className="hero-pill">
-              <span className="dot">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-              </span>
+          {/* Left — copy */}
+          <div className="hero-copy">
+            <span className="eyebrow hero-pill">
+              <span className="dot" />
               <span>{t.hero.pill}</span>
             </span>
             <h1>{t.hero.title}</h1>
-            <p className="lead">{t.hero.lead}</p>
+            <p className="hero-lead">{t.hero.lead}</p>
             <div className="hero-ctas">
-              <button type="button" className="btn btn-primary btn-lg" onClick={() => goToSignup()}>
-                <span>{t.hero.cta1}</span>
+              <button type="button" className="btn btn-blue btn-lg" onClick={() => goToSignup()}>
+                {t.hero.cta1}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
               </button>
               <button type="button" className="btn btn-ghost btn-lg" onClick={goToLogin}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-                <span>{t.hero.cta2}</span>
+                {t.hero.cta2}
               </button>
             </div>
             <div className="hero-meta">
-              {([t.hero.meta1, t.hero.meta2, t.hero.meta3] as const).map((m) => (
-                <div className="hero-meta-item" key={m}>
-                  <Check14 /><span>{m}</span>
-                </div>
+              {[t.hero.meta1, t.hero.meta2, t.hero.meta3].map((m) => (
+                <span key={m}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                  {m}
+                </span>
               ))}
             </div>
           </div>
 
-          {/* Dashboard mockup */}
-          <div className="hero-visual" style={{ position: "relative" }}>
-            <div className="dash">
-              <div className="dash-chrome">
-                <div className="lights"><span /><span /><span /></div>
+          {/* Right — screenshot + floating cards */}
+          <div className="hero-shot-wrap">
+            <div className="hero-shot-frame">
+              <div className="hero-shot-tb">
+                <div className="dots"><span /><span /><span /></div>
                 <div className="url">app.tams.my / dashboard</div>
               </div>
-              <div className="dash-body">
-                <aside className="dash-sidebar">
-                  <div className="dash-side-brand"><div className="logo">T</div><b>TAMS</b></div>
-                  <div className="dash-side-section">{t.hero.side.workspace}</div>
-                  <div className="dash-side-item active">
-                    <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
-                    <span>{t.hero.side.dashboard}</span>
-                  </div>
-                  <div className="dash-side-item">
-                    <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11V7a3 3 0 0 1 6 0v4" /><rect x="5" y="11" width="14" height="10" rx="2" /></svg>
-                    <span>{t.hero.side.bookings}</span>
-                  </div>
-                  <div className="dash-side-item">
-                    <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /></svg>
-                    <span>{t.hero.side.customers}</span>
-                  </div>
-                  <div className="dash-side-item">
-                    <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-                    <span>{t.hero.side.payments}</span>
-                  </div>
-                  <div className="dash-side-item">
-                    <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
-                    <span>{t.hero.side.invoices}</span>
-                  </div>
-                  <div className="dash-side-section">{t.hero.side.insights}</div>
-                  <div className="dash-side-item">
-                    <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" /><line x1="6" y1="20" x2="6" y2="16" /></svg>
-                    <span>{t.hero.side.reports}</span>
-                  </div>
-                </aside>
-                <div className="dash-main">
-                  <div className="dash-main-head">
-                    <h4>{t.hero.greeting}</h4>
-                    <span className="pill">● Live</span>
-                  </div>
-                  <div className="kpis">
-                    <div className="kpi"><div className="label">{t.hero.kpi1}</div><div className="value">142</div><div className="delta">↑ 18%</div></div>
-                    <div className="kpi"><div className="label">{t.hero.kpi2}</div><div className="value">RM 84.2k</div><div className="delta">↑ 12%</div></div>
-                    <div className="kpi"><div className="label">{t.hero.kpi3}</div><div className="value">RM 6,400</div><div className="delta warn">{t.hero.kpi3sub}</div></div>
-                  </div>
-                  <div className="dash-row">
-                    <div className="dash-card">
-                      <div className="dash-card-title">
-                        <b>{t.hero.chartTitle}</b><span>{t.hero.chartRange}</span>
-                      </div>
-                      <div className="chart">
-                        <svg viewBox="0 0 280 92" preserveAspectRatio="none">
-                          <line className="grid-line" x1="0" y1="20" x2="280" y2="20" />
-                          <line className="grid-line" x1="0" y1="50" x2="280" y2="50" />
-                          <line className="grid-line" x1="0" y1="80" x2="280" y2="80" />
-                          <path className="area" d="M0,72 L20,66 L40,58 L60,62 L80,48 L100,52 L120,40 L140,44 L160,30 L180,34 L200,22 L220,28 L240,18 L260,24 L280,12 L280,92 L0,92 Z" />
-                          <path className="line" d="M0,72 L20,66 L40,58 L60,62 L80,48 L100,52 L120,40 L140,44 L160,30 L180,34 L200,22 L220,28 L240,18 L260,24 L280,12" />
-                          <circle className="dot" cx="280" cy="12" r="3" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="dash-card">
-                      <div className="dash-card-title"><b>{t.hero.recent}</b></div>
-                      <div className="b-list">
-                        {[
-                          { av: "SL", cls: "", name: "Sarah Lim", meta: "Bali · 5D4N", tag: t.preview.paid, pending: false },
-                          { av: "HM", cls: "g", name: "Hafiz Mansor", meta: "Madinah · Umrah 12D", tag: t.preview.paid, pending: false },
-                          { av: "NB", cls: "w", name: "Nur Balqis", meta: "Istanbul · 9D7N", tag: t.preview.pending, pending: true },
-                        ].map((b) => (
-                          <div className="b-row" key={b.name}>
-                            <div className={`b-avatar${b.cls ? ` ${b.cls}` : ""}`}>{b.av}</div>
-                            <div className="b-info"><div className="b-name">{b.name}</div><div className="b-meta">{b.meta}</div></div>
-                            <span className={`b-tag${b.pending ? " pending" : ""}`}>{b.tag}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <Image
+                src="/images/TAMS-DASHBOARD.png"
+                alt="TAMS dashboard — bookings, revenue, and outstanding payments at a glance"
+                width={2940}
+                height={1672}
+                className="hero-shot-img"
+                priority
+              />
+            </div>
+
+            {/* Floating cards */}
+            <div className="float-card fc-revenue">
+              <div className="ic green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+              </div>
+              <div>
+                <div className="l">{t.hero.fc1l}</div>
+                <div className="v">{t.hero.fc1v}</div>
               </div>
             </div>
 
-            <div className="float-card a">
-              <div className="ic">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+            <div className="float-card fc-bookings">
+              <div className="ic blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
               </div>
-              <div><div className="lbl">{t.hero.float1}</div><div className="val">RM 4,820</div></div>
+              <div>
+                <div className="l">{t.hero.fc2l}</div>
+                <div className="v">{t.hero.fc2v} <span className="up">+18%</span></div>
+              </div>
             </div>
-            <div className="float-card b">
-              <div className="ic">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11V7a3 3 0 0 1 6 0v4" /><rect x="5" y="11" width="14" height="10" rx="2" /></svg>
+
+            <div className="float-card fc-sst">
+              <div className="ic indigo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="10" /></svg>
               </div>
-              <div><div className="lbl">{t.hero.float2}</div><div className="val">Umrah · 12D</div></div>
+              <div>
+                <div className="l">{t.hero.fc3l}</div>
+                <div className="v">{t.hero.fc3v}</div>
+              </div>
+            </div>
+
+            <div className="float-card fc-pdf">
+              <div className="ic amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+              </div>
+              <div>
+                <div className="l">{t.hero.fc4l}</div>
+                <div className="v">{t.hero.fc4v}</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* =================== TRUST =================== */}
+      {/* ═══════════════════════════════════════ TRUST ═════════════════════════════════════ */}
       <section className="trust">
         <div className="container">
           <div className="trust-head">{t.trust.head}</div>
-          <div className="trust-row">
-            {["Wanderly", "Voyageur", "Pelangi Tours", "Barakah Travel", "Horizon Travel"].map((name) => (
-              <div className="trust-logo" key={name}><span className="mark" />{name}</div>
-            ))}
+        </div>
+        <div className="marquee">
+          <div className="marquee-track">
+            {[
+              { letter: "S", bg: "linear-gradient(135deg,oklch(0.55 0.15 245),oklch(0.45 0.16 265))", name: "Safa Travel" },
+              { letter: "A", bg: "linear-gradient(135deg,oklch(0.5 0.14 165),oklch(0.45 0.13 195))",  name: "Ar-Rayyan Holidays" },
+              { letter: "W", bg: "linear-gradient(135deg,oklch(0.6 0.14 25),oklch(0.5 0.16 50))",    name: "Wanderly Travel" },
+              { letter: "U", bg: "linear-gradient(135deg,oklch(0.5 0.16 270),oklch(0.4 0.18 290))",  name: "UmrahGo" },
+              { letter: "H", bg: "linear-gradient(135deg,oklch(0.55 0.13 195),oklch(0.45 0.13 230))",name: "Horizon Travel" },
+              { letter: "P", bg: "linear-gradient(135deg,oklch(0.6 0.16 50),oklch(0.5 0.14 15))",   name: "Pelangi Tours" },
+              { letter: "M", bg: "linear-gradient(135deg,oklch(0.5 0.13 165),oklch(0.4 0.14 200))", name: "Mutiara Travel" },
+              { letter: "Q", bg: "linear-gradient(135deg,oklch(0.45 0.15 275),oklch(0.55 0.14 245))",name: "Qiblat Journey" },
+            ].flatMap((item, i) => [
+              <span className="logo-pill" key={`a-${i}`}>
+                <span className="logo-mark" style={{ background: item.bg }}>{item.letter}</span>
+                {item.name}
+              </span>,
+              <span className="logo-pill" key={`b-${i}`} aria-hidden="true">
+                <span className="logo-mark" style={{ background: item.bg }}>{item.letter}</span>
+                {item.name}
+              </span>,
+            ])}
           </div>
         </div>
       </section>
 
-      {/* =================== PROBLEM =================== */}
-      <section className="problem">
+      {/* ═══════════════════════════════════════ PROBLEM ═══════════════════════════════════ */}
+      <section className="section problems" id="problems">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.problem.eyebrow}</span>
-            <h2>{t.problem.title}</h2>
-            <p className="lead" style={{ marginTop: 14 }}>{t.problem.lead}</p>
+          <div className="section-head reveal">
+            <span className="eyebrow eyebrow-warn"><span className="dot" />{t.problem.eyebrow}</span>
+            <h2 className="section-title">{t.problem.title}</h2>
+            <p className="section-lead">{t.problem.lead}</p>
           </div>
-          <div className="problem-grid">
-            {[
-              { icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="21" x2="9" y2="9" /></svg>, t: t.problem.p1t, d: t.problem.p1d },
-              { icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>, t: t.problem.p2t, d: t.problem.p2d },
-              { icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></svg>, t: t.problem.p3t, d: t.problem.p3d },
-              { icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>, t: t.problem.p4t, d: t.problem.p4d },
-            ].map((p) => (
-              <div className="problem-card" key={p.t}>
-                <div className="strike">✕</div>
+          <div className="problem-grid reveal-stagger">
+            {([
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="3" x2="9" y2="21" /></svg>, t: t.problem.p1t, d: t.problem.p1d },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>, t: t.problem.p2t, d: t.problem.p2d },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>, t: t.problem.p3t, d: t.problem.p3d },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="9" y1="15" x2="15" y2="15" /></svg>, t: t.problem.p4t, d: t.problem.p4d },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18" /><path d="M7 14l4-4 4 4 5-5" /></svg>, t: t.problem.p5t, d: t.problem.p5d },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>, t: t.problem.p6t, d: t.problem.p6d },
+            ] as const).map((p) => (
+              <article className="problem-card" key={p.t}>
                 <div className="ic">{p.icon}</div>
-                <h3>{p.t}</h3>
+                <h4>{p.t}</h4>
                 <p>{p.d}</p>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* =================== FEATURES =================== */}
-      <section className="features" id="features">
+      {/* ══════════════════════════════════════ FEATURES BENTO ═════════════════════════════ */}
+      <section id="features" className="section" style={{ background: "var(--bg-soft)" }}>
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.features.eyebrow}</span>
-            <h2>{t.features.title}</h2>
-            <p className="lead" style={{ marginTop: 14 }}>{t.features.lead}</p>
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />{t.bento.eyebrow}</span>
+            <h2 className="section-title">{t.bento.title}</h2>
+            <p className="section-lead">{t.bento.lead}</p>
           </div>
-          <div className="features-grid">
-            {[
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11V7a3 3 0 0 1 6 0v4" /><rect x="5" y="11" width="14" height="10" rx="2" /></svg>, t: t.features.f1t, d: t.features.f1d },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>, t: t.features.f2t, d: t.features.f2d },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><line x1="3" y1="10" x2="21" y2="10" /><line x1="7" y1="15" x2="9" y2="15" /></svg>, t: t.features.f3t, d: t.features.f3d },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>, t: t.features.f4t, d: t.features.f4d },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" /><line x1="6" y1="20" x2="6" y2="16" /></svg>, t: t.features.f5t, d: t.features.f5d },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="7" r="4" /><circle cx="17" cy="7" r="3" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M21 21v-2a4 4 0 0 0-3-3.87" /></svg>, t: t.features.f6t, d: t.features.f6d },
-            ].map((f) => (
-              <div className="feature" key={f.t}>
-                <div className="ic">{f.icon}</div>
-                <h3>{f.t}</h3>
-                <p>{f.d}</p>
+          <div className="bento">
+            {/* Booking Management — span 3 */}
+            <article className="bento-card feature span-3 reveal">
+              <div className="ic">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
               </div>
-            ))}
+              <h3>{t.bento.feat_t}</h3>
+              <p>{t.bento.feat_d}</p>
+              <div className="mini-preview">
+                <div className="row"><span className="name">Aisha · Bali 5D4N</span><span className="pill">Paid</span></div>
+                <div className="row"><span className="name">Hafiz · Umrah 12D</span><span className="pill w">Pending</span></div>
+                <div className="row"><span className="name">Mei Chen · Tokyo 7D</span><span className="pill">Paid</span></div>
+                <div className="row"><span className="name">Daniel · Korea 6D</span><span className="pill">Paid</span></div>
+              </div>
+            </article>
+
+            {/* Customer Management — span 3 */}
+            <article className="bento-card span-3 reveal">
+              <div className="ic">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+              </div>
+              <h3>{t.bento.cust_t}</h3>
+              <p>{t.bento.cust_d}</p>
+              <div className="mini-preview">
+                <div className="row"><span className="name">Aisha Rahman</span><span className="pill b">12 trips</span></div>
+                <div className="row"><span className="name">Hafiz Yusof</span><span className="pill b">7 trips</span></div>
+                <div className="row"><span className="name">Mei Chen</span><span className="pill b">5 trips</span></div>
+              </div>
+            </article>
+
+            {/* Payment Tracking — span 2 */}
+            <article className="bento-card span-2 reveal">
+              <div className="ic">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
+              </div>
+              <h3>{t.bento.pay_t}</h3>
+              <p>{t.bento.pay_d}</p>
+              <div className="mini-bars">
+                {[35, 55, 42, 70, 60, 85, 75].map((h, i) => (
+                  <span key={i} style={{ height: `${h}%` }} />
+                ))}
+              </div>
+            </article>
+
+            {/* Invoice & PDF — span 2 */}
+            <article className="bento-card span-2 reveal">
+              <div className="ic">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="15" y2="17" /></svg>
+              </div>
+              <h3>{t.bento.inv_t}</h3>
+              <p>{t.bento.inv_d}</p>
+              <div className="invoice-mini">
+                <div className="h"><b>INV-2026-1042</b><span>Paid</span></div>
+                <div className="lines">
+                  <div className="l"><span>Bali 5D4N</span><span>RM 3,800</span></div>
+                  <div className="l"><span>SST 8%</span><span>RM 304</span></div>
+                </div>
+                <div className="total"><span>Total</span><span>RM 4,104</span></div>
+              </div>
+            </article>
+
+            {/* Reports — span 2 */}
+            <article className="bento-card span-2 reveal">
+              <div className="ic">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18" /><path d="M7 14l4-4 4 4 5-5" /></svg>
+              </div>
+              <h3>{t.bento.rep_t}</h3>
+              <p>{t.bento.rep_d}</p>
+              <div className="mini-preview">
+                <div className="row"><span className="name">Bali</span><span className="pill">RM 84k</span></div>
+                <div className="row"><span className="name">Tokyo</span><span className="pill">RM 62k</span></div>
+                <div className="row"><span className="name">Umrah</span><span className="pill">RM 51k</span></div>
+              </div>
+            </article>
+
+            {/* Multi-user — span 6 */}
+            <article className="bento-card span-6 reveal" style={{ display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 260 }}>
+                <div className="ic">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+                </div>
+                <h3>{t.bento.team_t}</h3>
+                <p style={{ marginBottom: 0 }}>{t.bento.team_d}</p>
+              </div>
+              <div style={{ display: "flex", flex: 1, justifyContent: "flex-end", minWidth: 260 }}>
+                {[
+                  { init: "AR", bg: "oklch(0.95 0.04 245)", color: "var(--primary)" },
+                  { init: "HY", bg: "oklch(0.95 0.04 165)", color: "oklch(0.45 0.13 165)" },
+                  { init: "MC", bg: "oklch(0.95 0.04 280)", color: "var(--indigo)" },
+                  { init: "DT", bg: "oklch(0.96 0.06 80)",  color: "oklch(0.5 0.14 60)" },
+                  { init: "+8", bg: "var(--ink)",            color: "#fff", small: true },
+                ].map((av, i) => (
+                  <div key={i} style={{
+                    width: 52, height: 52, borderRadius: "999px",
+                    background: av.bg, color: av.color,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontWeight: 700, border: "3px solid white",
+                    marginLeft: i === 0 ? 0 : -12,
+                    boxShadow: "var(--shadow-sm)",
+                    fontSize: av.small ? 13 : 14,
+                    flexShrink: 0,
+                    position: "relative",
+                  }}>
+                    {av.init}
+                  </div>
+                ))}
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* =================== PRODUCT PREVIEW =================== */}
-      <section className="preview">
+      {/* ══════════════════════════════════════ SHOWCASE ═══════════════════════════════════ */}
+      <section id="showcase" className="showcase">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.preview.eyebrow}</span>
-            <h2>{t.preview.title}</h2>
-            <p className="lead" style={{ marginTop: 14 }}>{t.preview.lead}</p>
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />{t.show.eyebrow}</span>
+            <h2 className="section-title">{t.show.title}</h2>
+            <p className="section-lead">{t.show.lead}</p>
           </div>
 
-          <div className="preview-tabs-wrap">
-            <div className="preview-tabs" role="tablist">
-              {(["dashboard", "bookings", "packages", "invoice"] as const).map((tab, i) => (
-                <button
-                  key={tab}
-                  className={`preview-tab${activeTab === tab ? " active" : ""}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {[t.preview.tab1, t.preview.tab2, t.preview.tab3, t.preview.tab4][i]}
-                </button>
-              ))}
+          {/* A — Bookings */}
+          <div className="show-row">
+            <div className="show-copy reveal">
+              <span className="eyebrow"><span className="dot" />{t.show.a_tag}</span>
+              <h3>{t.show.a_t}</h3>
+              <p>{t.show.a_d}</p>
+              <ul className="show-bullets">
+                <CheckBullet text={t.show.a_b1} />
+                <CheckBullet text={t.show.a_b2} />
+                <CheckBullet text={t.show.a_b3} />
+              </ul>
             </div>
-          </div>
-
-          <div className="preview-frame">
-            {/* DASHBOARD PANEL */}
-            <div className={`preview-panel${activeTab === "dashboard" ? " active" : ""}`}>
-              <div className="dash" style={{ borderRadius: 0, border: 0, boxShadow: "none" }}>
-                <div className="dash-chrome">
-                  <div className="lights"><span /><span /><span /></div>
-                  <div className="url">app.tams.my / dashboard</div>
+            <div className="show-shot reveal">
+              <div className="shot-frame">
+                <div className="shot-chrome">
+                  <div className="dots"><span /><span /><span /></div>
+                  <div className="url-bar">app.tams.my / bookings</div>
                 </div>
-                <div className="dash-body" style={{ minHeight: 460 }}>
-                  <aside className="dash-sidebar">
-                    <div className="dash-side-brand"><div className="logo">T</div><b>TAMS</b></div>
-                    <div className="dash-side-section">{t.hero.side.workspace}</div>
-                    <div className="dash-side-item active">
-                      <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
-                      <span>{t.hero.side.dashboard}</span>
-                    </div>
-                    {[
-                      { label: t.hero.side.bookings, icon: <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11V7a3 3 0 0 1 6 0v4" /><rect x="5" y="11" width="14" height="10" rx="2" /></svg> },
-                      { label: t.hero.side.customers, icon: <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg> },
-                      { label: t.hero.side.payments, icon: <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><line x1="3" y1="10" x2="21" y2="10" /></svg> },
-                      { label: t.hero.side.invoices, icon: <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg> },
-                    ].map((item) => (
-                      <div className="dash-side-item" key={item.label}>{item.icon}<span>{item.label}</span></div>
-                    ))}
-                  </aside>
-                  <div className="dash-main">
-                    <div className="dash-main-head"><h4>{t.preview.dashTitle}</h4><span className="pill">● Live</span></div>
-                    <div className="kpis">
-                      <div className="kpi"><div className="label">{t.hero.kpi1}</div><div className="value">142</div><div className="delta">↑ 18%</div></div>
-                      <div className="kpi"><div className="label">{t.hero.kpi2}</div><div className="value">RM 84.2k</div><div className="delta">↑ 12%</div></div>
-                      <div className="kpi"><div className="label">{t.hero.kpi3}</div><div className="value">RM 6,400</div><div className="delta warn">{t.hero.kpi3sub}</div></div>
-                    </div>
-                    <div className="dash-row">
-                      <div className="dash-card">
-                        <div className="dash-card-title"><b>{t.hero.chartTitle}</b><span>{t.hero.chartRange}</span></div>
-                        <div className="chart">
-                          <svg viewBox="0 0 280 92" preserveAspectRatio="none">
-                            <line className="grid-line" x1="0" y1="20" x2="280" y2="20" />
-                            <line className="grid-line" x1="0" y1="50" x2="280" y2="50" />
-                            <line className="grid-line" x1="0" y1="80" x2="280" y2="80" />
-                            <path className="area" d="M0,72 L20,66 L40,58 L60,62 L80,48 L100,52 L120,40 L140,44 L160,30 L180,34 L200,22 L220,28 L240,18 L260,24 L280,12 L280,92 L0,92 Z" />
-                            <path className="line" d="M0,72 L20,66 L40,58 L60,62 L80,48 L100,52 L120,40 L140,44 L160,30 L180,34 L200,22 L220,28 L240,18 L260,24 L280,12" />
-                          </svg>
-                        </div>
-                      </div>
-                      <div className="dash-card">
-                        <div className="dash-card-title"><b>{t.preview.topTitle}</b></div>
-                        <div className="b-list">
-                          {[
-                            { av: "🕌", cls: "", name: "Madinah / Makkah", meta: "42 bookings", tag: "29%", p: false },
-                            { av: "🇮🇩", cls: "g", name: "Bali", meta: "31 bookings", tag: "22%", p: false },
-                            { av: "🇯🇵", cls: "w", name: "Tokyo", meta: "28 bookings", tag: "19%", p: true },
-                          ].map((d) => (
-                            <div className="b-row" key={d.name}>
-                              <div className={`b-avatar${d.cls ? ` ${d.cls}` : ""}`} style={{ fontSize: 14 }}>{d.av}</div>
-                              <div className="b-info"><div className="b-name">{d.name}</div><div className="b-meta">{d.meta}</div></div>
-                              <span className={`b-tag${d.p ? " pending" : ""}`}>{d.tag}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                <div className="shot-body" style={{ padding: "16px 0 0" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 12px" }}>
+                    <span style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)" }}>Bookings</span>
+                    <button className="btn btn-primary btn-sm">+ New booking</button>
                   </div>
+                  <table className="shot-table">
+                    <thead><tr><th>Customer</th><th>Package</th><th>Dates</th><th>Total</th><th>Status</th></tr></thead>
+                    <tbody>
+                      {[
+                        { av: "AR", name: "Aisha Rahman", pkg: "Bali 5D4N", dates: "12–16 May", amt: "RM 4,104", s: "paid" },
+                        { av: "HY", name: "Hafiz Yusof", pkg: "Umrah 12D", dates: "05–16 Jun", amt: "RM 11,200", s: "paid" },
+                        { av: "MC", name: "Mei Chen", pkg: "Tokyo 7D6N", dates: "18–24 Jun", amt: "RM 6,280", s: "pending" },
+                        { av: "DT", name: "Daniel Tan", pkg: "Korea 6D5N", dates: "22–27 Jun", amt: "RM 7,300", s: "paid" },
+                        { av: "SA", name: "Siti Amirah", pkg: "Istanbul 9D", dates: "04–12 Jul", amt: "RM 8,100", s: "draft" },
+                      ].map((b) => (
+                        <tr key={b.name}>
+                          <td><div style={{ display: "flex", alignItems: "center", gap: 8 }}><div className="shot-av">{b.av}</div><span style={{ fontWeight: 500, color: "var(--ink)", fontSize: 12 }}>{b.name}</span></div></td>
+                          <td>{b.pkg}</td><td>{b.dates}</td><td style={{ fontWeight: 600 }}>{b.amt}</td>
+                          <td><span className={`shot-tag ${b.s}`}>{b.s.charAt(0).toUpperCase() + b.s.slice(1)}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* BOOKINGS PANEL */}
-            <div className={`preview-panel${activeTab === "bookings" ? " active" : ""}`}>
-              <div className="table-mock">
-                <div className="table-head">
-                  <h3>{t.preview.bookingsTitle}</h3>
-                  <div className="actions">
-                    <div className="search-box">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                      <span>{t.preview.bookingsSearch}</span>
-                    </div>
-                    <button className="btn btn-primary btn-sm">{t.preview.bookingsNew}</button>
-                  </div>
-                </div>
-                <table className="tbl">
-                  <thead>
-                    <tr>
-                      <th>{t.preview.bH1}</th><th>{t.preview.bH2}</th>
-                      <th>{t.preview.bH3}</th><th>{t.preview.bH4}</th><th>{t.preview.bH5}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { av: "SL", cls: "", name: "Sarah Lim", email: "sarah.l@gmail.com", dest: "Bali · 5D4N", dates: "12 May – 16 May", total: "RM 4,820", s: "paid" },
-                      { av: "HM", cls: "g", name: "Hafiz Mansor", email: "hafiz.m@gmail.com", dest: "Madinah · Umrah 12D", dates: "05 Jun – 16 Jun", total: "RM 11,200", s: "paid" },
-                      { av: "NB", cls: "w", name: "Nur Balqis", email: "balqis@hotmail.com", dest: "Istanbul · 9D7N", dates: "18 Jun – 26 Jun", total: "RM 12,200", s: "pending" },
-                      { av: "CW", cls: "", name: "Chong Wei", email: "cw@business.my", dest: "Seoul · 6D5N", dates: "22 Jun – 27 Jun", total: "RM 7,300", s: "draft" },
-                      { av: "FA", cls: "g", name: "Farah Ahmad", email: "farah@email.com", dest: "Dubai · 5D4N", dates: "04 Jul – 08 Jul", total: "RM 6,150", s: "paid" },
-                    ].map((b) => (
-                      <tr key={b.name}>
-                        <td><div className="cust"><div className={`av${b.cls ? ` ${b.cls}` : ""}`}>{b.av}</div><div>{b.name}<small>{b.email}</small></div></div></td>
-                        <td>{b.dest}</td><td>{b.dates}</td><td>{b.total}</td>
-                        <td><span className={`status-tag${b.s !== "paid" ? ` ${b.s}` : ""}`}>{b.s === "paid" ? t.preview.paid : b.s === "pending" ? t.preview.pending : t.preview.draft}</span></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+          {/* B — Packages (reversed) */}
+          <div className="show-row reverse">
+            <div className="show-copy reveal">
+              <span className="eyebrow"><span className="dot" />{t.show.b_tag}</span>
+              <h3>{t.show.b_t}</h3>
+              <p>{t.show.b_d}</p>
+              <ul className="show-bullets">
+                <CheckBullet text={t.show.b_b1} />
+                <CheckBullet text={t.show.b_b2} />
+                <CheckBullet text={t.show.b_b3} />
+              </ul>
             </div>
-
-            {/* PACKAGES PANEL */}
-            <div className={`preview-panel${activeTab === "packages" ? " active" : ""}`}>
-              <div className="packages-mock">
-                <div className="table-head">
-                  <h3>{t.preview.packagesTitle}</h3>
-                  <div className="actions">
-                    <div className="search-box">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                      <span>{t.preview.packagesSearch}</span>
-                    </div>
-                    <button className="btn btn-primary btn-sm">{t.preview.packagesNew}</button>
-                  </div>
+            <div className="show-shot reveal">
+              <div className="shot-frame">
+                <div className="shot-chrome">
+                  <div className="dots"><span /><span /><span /></div>
+                  <div className="url-bar">app.tams.my / packages</div>
                 </div>
-                <div className="pkg-grid">
+                <div className="shot-pkg-grid">
                   {[
-                    { bg: "bg-umrah", badge: "Umrah", title: "Umrah 12 Days", desc: "Madinah & Makkah · Direct flight from KLIA", price: "RM 9,800" },
-                    { bg: "bg-bali", badge: "Holiday", title: "Bali Family 5D4N", desc: "Seminyak resort · Private transfers · Half-board", price: "RM 2,410" },
-                    { bg: "bg-tokyo", badge: "Holiday", title: "Tokyo Highlights 7D6N", desc: "Shinjuku stay · Mt. Fuji day trip · JR Pass included", price: "RM 4,820" },
-                    { bg: "bg-istanbul", badge: "Halal", title: "Istanbul Heritage 9D7N", desc: "Old City + Cappadocia · Halal-friendly itinerary", price: "RM 6,100" },
-                    { bg: "bg-korea", badge: "Holiday", title: "Korea Spring 6D5N", desc: "Seoul · Nami Island · Cherry blossom season", price: "RM 3,650" },
-                    { bg: "bg-dubai", badge: "Holiday", title: "Dubai Express 5D4N", desc: "Downtown stay · Desert safari · Burj Khalifa", price: "RM 3,075" },
+                    { bg: "linear-gradient(135deg,oklch(0.45 0.18 260),oklch(0.35 0.2 250))", badge: "Umrah", t: "Umrah 12D", p: "RM 9,800" },
+                    { bg: "linear-gradient(135deg,oklch(0.6 0.14 155),oklch(0.45 0.16 145))", badge: "Holiday", t: "Bali 5D4N", p: "RM 2,410" },
+                    { bg: "linear-gradient(135deg,oklch(0.6 0.12 0),oklch(0.45 0.14 350))", badge: "Holiday", t: "Tokyo 7D6N", p: "RM 4,820" },
+                    { bg: "linear-gradient(135deg,oklch(0.55 0.16 50),oklch(0.45 0.18 40))", badge: "Halal", t: "Istanbul 9D", p: "RM 6,100" },
+                    { bg: "linear-gradient(135deg,oklch(0.6 0.12 330),oklch(0.45 0.14 320))", badge: "Holiday", t: "Korea 6D5N", p: "RM 3,650" },
+                    { bg: "linear-gradient(135deg,oklch(0.65 0.14 80),oklch(0.5 0.16 70))", badge: "Holiday", t: "Dubai 5D4N", p: "RM 3,075" },
                   ].map((p) => (
-                    <div className="pkg-card" key={p.title}>
-                      <div className={`pkg-img ${p.bg}`}><span className="badge">{p.badge}</span></div>
-                      <div className="pkg-info">
-                        <div className="t">{p.title}</div>
-                        <div className="d">{p.desc}</div>
-                        <div className="price-row">
-                          <span className="pf">{t.preview.from}</span>
-                          <div><span className="pa">{p.price}</span><span className="pp">{t.preview.pax}</span></div>
-                        </div>
+                    <div className="shot-pkg" key={p.t}>
+                      <div className="shot-pkg-art" style={{ background: p.bg }}>
+                        <span className="shot-pkg-badge">{p.badge}</span>
+                      </div>
+                      <div className="shot-pkg-info">
+                        <div className="t">{p.t}</div>
+                        <div className="p">{p.p}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* INVOICE PANEL */}
-            <div className={`preview-panel${activeTab === "invoice" ? " active" : ""}`}>
-              <div className="invoice-mock">
-                <div className="invoice-side">
-                  <h3>{t.preview.invTitle}</h3>
-                  <p>{t.preview.invLead}</p>
-                  <div className="invoice-meta">
-                    <div><span>{t.preview.invNum}</span><span>INV-2026-0142</span></div>
-                    <div><span>{t.preview.invStatus}</span><span style={{ color: "var(--accent-deep)" }}>{t.preview.invStatusPaid}</span></div>
-                    <div><span>{t.preview.invSst}</span><span>RM 357.04</span></div>
-                    <div><span>{t.preview.invTotal}</span><span>RM 4,820.00</span></div>
-                  </div>
+          {/* C — Invoices */}
+          <div className="show-row">
+            <div className="show-copy reveal">
+              <span className="eyebrow"><span className="dot" />{t.show.c_tag}</span>
+              <h3>{t.show.c_t}</h3>
+              <p>{t.show.c_d}</p>
+              <ul className="show-bullets">
+                <CheckBullet text={t.show.c_b1} />
+                <CheckBullet text={t.show.c_b2} />
+                <CheckBullet text={t.show.c_b3} />
+              </ul>
+            </div>
+            <div className="show-shot reveal">
+              <div className="shot-frame doc">
+                <div className="shot-chrome">
+                  <div className="dots"><span /><span /><span /></div>
+                  <div className="url-bar">app.tams.my / invoices / INV-2026-1042</div>
                 </div>
-                <div className="invoice-paper">
-                  <div className="inv-head">
+                <div className="shot-invoice">
+                  <div className="shot-inv-head">
                     <div>
-                      <h4>{t.preview.invHeading}</h4>
-                      <div className="num">INV-2026-0142 · <span>{t.preview.invIssued}</span></div>
+                      <h4>Invoice</h4>
+                      <div className="num">INV-2026-1042 · Issued 12 May 2026</div>
                     </div>
-                    <div className="inv-from">
+                    <div className="shot-inv-from">
                       <b>Wanderly Travel Sdn Bhd</b>
                       Lot 12, Jalan Tun Razak<br />
                       Kuala Lumpur · SST: W10-1234
                     </div>
                   </div>
-                  <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 14 }}>
-                    <b style={{ color: "var(--ink)", display: "block", fontSize: 13, marginBottom: 2 }}>{t.preview.invBilled}</b>
-                    Sarah Lim · sarah.l@gmail.com
+                  <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginBottom: 12 }}>
+                    <b style={{ color: "var(--ink)", display: "block", marginBottom: 2 }}>Billed to</b>
+                    Aisha Rahman · aisha.rahman@gmail.com
                   </div>
-                  <table className="inv-tbl">
-                    <thead><tr>
-                      <th>{t.preview.invDesc}</th>
-                      <th className="r">{t.preview.invQty}</th>
-                      <th className="r">{t.preview.invAmt}</th>
-                    </tr></thead>
+                  <table className="shot-inv-tbl">
+                    <thead><tr><th>Description</th><th className="r">Qty</th><th className="r">Amount</th></tr></thead>
                     <tbody>
-                      <tr><td>{t.preview.invLine1}</td><td className="r">2</td><td className="r">RM 3,800.00</td></tr>
-                      <tr><td>{t.preview.invLine2}</td><td className="r">2</td><td className="r">RM 320.00</td></tr>
-                      <tr><td>{t.preview.invLine3}</td><td className="r">1</td><td className="r">RM 342.96</td></tr>
+                      <tr><td>Bali Holiday Package · 5D4N</td><td className="r">2</td><td className="r">RM 3,800.00</td></tr>
+                      <tr><td>Travel Insurance Add-on</td><td className="r">2</td><td className="r">RM 320.00</td></tr>
+                      <tr><td>Airport Transfer (Return)</td><td className="r">1</td><td className="r">RM 280.00</td></tr>
                     </tbody>
                   </table>
-                  <div className="inv-totals">
-                    <div><span>{t.preview.invSubtotal}</span><span>RM 4,462.96</span></div>
-                    <div><span>{t.preview.invSst}</span><span>RM 357.04</span></div>
-                    <div className="grand"><span>{t.preview.invTotal}</span><span>RM 4,820.00</span></div>
+                  <div className="shot-inv-total">
+                    <div><span>Subtotal</span><span>RM 4,400.00</span></div>
+                    <div><span>SST 6%</span><span>RM 264.00</span></div>
+                    <div className="grand"><span>Total</span><span>RM 4,664.00</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* D — Confirmations (reversed) */}
+          <div className="show-row reverse">
+            <div className="show-copy reveal">
+              <span className="eyebrow"><span className="dot" />{t.show.d_tag}</span>
+              <h3>{t.show.d_t}</h3>
+              <p>{t.show.d_d}</p>
+              <ul className="show-bullets">
+                <CheckBullet text={t.show.d_b1} />
+                <CheckBullet text={t.show.d_b2} />
+                <CheckBullet text={t.show.d_b3} />
+              </ul>
+            </div>
+            <div className="show-shot reveal">
+              <div className="shot-frame doc">
+                <div className="shot-chrome">
+                  <div className="dots"><span /><span /><span /></div>
+                  <div className="url-bar">app.tams.my / confirmations / BC-2026-0089</div>
+                </div>
+                <div className="shot-confirm">
+                  <div className="shot-confirm-head">
+                    <div className="shot-confirm-logo">T</div>
+                    <div>
+                      <div className="shot-confirm-title">Booking Confirmation</div>
+                      <div className="shot-confirm-sub">Wanderly Travel Sdn Bhd · BC-2026-0089</div>
+                    </div>
+                  </div>
+                  <div className="shot-confirm-section">
+                    <h6>Package Details</h6>
+                    <div className="shot-confirm-row"><span>Package</span><b>Bali Family 5D4N</b></div>
+                    <div className="shot-confirm-row"><span>Departure</span><b>12 May 2026</b></div>
+                    <div className="shot-confirm-row"><span>Return</span><b>16 May 2026</b></div>
+                    <div className="shot-confirm-row"><span>Hotel</span><b>Seminyak Beach Resort</b></div>
+                  </div>
+                  <div className="shot-confirm-section">
+                    <h6>Travellers</h6>
+                    <div className="shot-confirm-row"><span>Aisha Rahman (F)</span><b>RM 2,080</b></div>
+                    <div className="shot-confirm-row"><span>Ahmad Rahman (M)</span><b>RM 2,080</b></div>
+                    <div className="shot-confirm-row"><span>Nur Aisyah (Child)</span><b>RM 1,560</b></div>
+                  </div>
+                  <div className="shot-confirm-section">
+                    <h6>Payment Summary</h6>
+                    <div className="shot-confirm-row"><span>Total Package</span><b>RM 5,720</b></div>
+                    <div className="shot-confirm-row"><span>Deposit Paid</span><b style={{ color: "var(--success)" }}>RM 2,000</b></div>
+                    <div className="shot-confirm-row"><span>Balance Due</span><b style={{ color: "var(--warn)" }}>RM 3,720</b></div>
                   </div>
                 </div>
               </div>
@@ -780,190 +845,240 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* =================== HOW IT WORKS =================== */}
-      <section className="how" id="how">
+      {/* ══════════════════════════════════════ USE CASES ══════════════════════════════════ */}
+      <section className="section">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.how.eyebrow}</span>
-            <h2>{t.how.title}</h2>
-            <p className="lead" style={{ marginTop: 14 }}>{t.how.lead}</p>
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />{t.uc.eyebrow}</span>
+            <h2 className="section-title">{t.uc.title}</h2>
+            <p className="section-lead">{t.uc.lead}</p>
           </div>
-          <div className="how-grid">
-            {[
-              { n: "1", t: t.how.s1t, d: t.how.s1d },
-              { n: "2", t: t.how.s2t, d: t.how.s2d },
-              { n: "3", t: t.how.s3t, d: t.how.s3d },
-            ].map((s) => (
-              <div className="step" key={s.n}>
-                <div className="step-num">{s.n}</div>
-                <h3>{s.t}</h3>
-                <p>{s.d}</p>
+          <div className="usecases">
+            {/* Umrah */}
+            <article className="uc-card reveal">
+              <div className="uc-art umrah">
+                <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <path d="M0 90 Q50 70 100 85 T200 80 L200 140 L0 140 Z" fill="white" opacity="0.2" />
+                  <circle cx="160" cy="35" r="18" fill="white" opacity="0.6" />
+                  <path d="M40 100 L40 70 Q40 55 55 55 L60 55 L60 70 L80 70 L80 55 L85 55 Q100 55 100 70 L100 100 Z" fill="white" opacity="0.5" />
+                  <path d="M55 55 Q55 45 60 45 Q65 45 65 55" stroke="white" strokeWidth="2" fill="none" opacity="0.6" />
+                  <path d="M75 55 Q75 45 80 45 Q85 45 85 55" stroke="white" strokeWidth="2" fill="none" opacity="0.6" />
+                </svg>
+                <span className="uc-label">{t.uc.umrah_tag}</span>
               </div>
-            ))}
+              <div className="uc-body">
+                <h3>{t.uc.umrah_t}</h3>
+                <p>{t.uc.umrah_d}</p>
+                <div className="uc-tags"><span>Passport tracking</span><span>Group invoicing</span><span>Visa status</span></div>
+              </div>
+            </article>
+
+            {/* Leisure */}
+            <article className="uc-card reveal">
+              <div className="uc-art tour">
+                <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <path d="M0 100 L40 70 L80 90 L120 60 L160 75 L200 50 L200 140 L0 140 Z" fill="white" opacity="0.25" />
+                  <circle cx="40" cy="35" r="12" fill="white" opacity="0.7" />
+                  <circle cx="170" cy="40" r="8" fill="white" opacity="0.4" />
+                </svg>
+                <span className="uc-label">{t.uc.tour_tag}</span>
+              </div>
+              <div className="uc-body">
+                <h3>{t.uc.tour_t}</h3>
+                <p>{t.uc.tour_d}</p>
+                <div className="uc-tags"><span>Bali</span><span>Tokyo</span><span>Korea</span><span>Istanbul</span></div>
+              </div>
+            </article>
+
+            {/* Corporate */}
+            <article className="uc-card reveal">
+              <div className="uc-art corp">
+                <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <rect x="40" y="50" width="30" height="60" fill="white" opacity="0.4" />
+                  <rect x="80" y="35" width="30" height="75" fill="white" opacity="0.5" />
+                  <rect x="120" y="25" width="30" height="85" fill="white" opacity="0.4" />
+                  <rect x="48" y="60" width="4" height="6" fill="white" opacity="0.7" />
+                  <rect x="58" y="60" width="4" height="6" fill="white" opacity="0.7" />
+                  <rect x="88" y="45" width="4" height="6" fill="white" opacity="0.7" />
+                  <rect x="98" y="45" width="4" height="6" fill="white" opacity="0.7" />
+                  <rect x="128" y="35" width="4" height="6" fill="white" opacity="0.7" />
+                  <rect x="138" y="35" width="4" height="6" fill="white" opacity="0.7" />
+                </svg>
+                <span className="uc-label">{t.uc.corp_tag}</span>
+              </div>
+              <div className="uc-body">
+                <h3>{t.uc.corp_t}</h3>
+                <p>{t.uc.corp_d}</p>
+                <div className="uc-tags"><span>Corporate accounts</span><span>Multi-traveler</span><span>Company billing</span></div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* =================== BENEFITS =================== */}
-      <section className="benefits">
+      {/* ══════════════════════════════════════ BENEFITS ═══════════════════════════════════ */}
+      <section className="section benefits" style={{ background: "var(--bg-soft)" }}>
         <div className="container">
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />{t.benefits.eyebrow}</span>
+            <h2 className="section-title">{t.benefits.title}</h2>
+            <p className="section-lead">{t.benefits.lead}</p>
+          </div>
           <div className="benefits-grid">
-            <div>
-              <span className="eyebrow">{t.benefits.eyebrow}</span>
-              <h2 style={{ margin: "18px 0 16px" }}>{t.benefits.title}</h2>
-              <p className="lead" style={{ marginBottom: 32 }}>{t.benefits.lead}</p>
-              <div className="benefits-list">
-                {[
-                  { t: t.benefits.b1t, d: t.benefits.b1d },
-                  { t: t.benefits.b2t, d: t.benefits.b2d },
-                  { t: t.benefits.b3t, d: t.benefits.b3d },
-                  { t: t.benefits.b4t, d: t.benefits.b4d },
-                ].map((b) => (
-                  <div className="benefit-row" key={b.t}>
-                    <div className="check"><Check14 /></div>
-                    <div><h3>{b.t}</h3><p>{b.d}</p></div>
-                  </div>
+            <div className="benefit reveal">
+              <div className="ic green">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+              </div>
+              <div><h4>{t.benefits.b1t}</h4><p>{t.benefits.b1d}</p></div>
+            </div>
+            <div className="benefit reveal">
+              <div className="ic">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+              </div>
+              <div><h4>{t.benefits.b2t}</h4><p>{t.benefits.b2d}</p></div>
+            </div>
+            <div className="benefit reveal">
+              <div className="ic indigo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
+              </div>
+              <div><h4>{t.benefits.b3t}</h4><p>{t.benefits.b3d}</p></div>
+            </div>
+            <div className="benefit reveal">
+              <div className="ic amber">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" /></svg>
+              </div>
+              <div><h4>{t.benefits.b4t}</h4><p>{t.benefits.b4d}</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════ PRICING ════════════════════════════════════ */}
+      <section id="pricing" className="section">
+        <div className="container">
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />{t.pricing.eyebrow}</span>
+            <h2 className="section-title">{t.pricing.title}</h2>
+            <p className="section-lead">{t.pricing.lead}</p>
+          </div>
+
+          <div className="pricing-grid-new">
+            {/* Basic */}
+            <div style={{ background: "white", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: 36, transition: "all .25s ease" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-strong)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "var(--shadow-md)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}
+            >
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{t.pricing.basic_name}</h3>
+              <p style={{ fontSize: 14, color: "var(--ink-3)", marginBottom: 20 }}>{t.pricing.basic_tag}</p>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 24 }}>
+                <span style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em" }}>RM 99.90</span>
+                <span style={{ fontSize: 14, color: "var(--ink-3)" }}>/ {lang === "bm" ? "bulan" : "month"}</span>
+              </div>
+              <button type="button" className="btn btn-ghost" style={{ width: "100%", marginBottom: 24, justifyContent: "center" }} onClick={() => goToSignup()}>
+                {t.pricing.basic_cta}
+              </button>
+              <ul style={{ listStyle: "none", display: "grid", gap: 12, fontSize: 14 }}>
+                {[t.pricing.basic_f1, t.pricing.basic_f2, t.pricing.basic_f3, t.pricing.basic_f4, t.pricing.basic_f5].map((f) => (
+                  <li key={f} style={{ display: "flex", gap: 10, alignItems: "flex-start", color: "var(--ink-2)" }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="3" style={{ flexShrink: 0, marginTop: 2 }}><polyline points="20 6 9 17 4 12" /></svg>
+                    {f}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
-            <div className="benefits-stat-card">
-              <div className="bsc-eyebrow">{t.benefits.qEyebrow}</div>
-              <div className="bsc-quote">{t.benefits.qText}</div>
-              <div style={{ marginTop: 24, display: "flex", alignItems: "center", gap: 12, position: "relative", zIndex: 1 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 999, background: "oklch(0.7 0.14 155 / 0.4)", display: "grid", placeItems: "center", fontWeight: 700, fontSize: 14 }}>AR</div>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 14 }}>Aisha Rahman</div>
-                  <div style={{ fontSize: 12.5, color: "oklch(0.85 0.03 230)" }}>{t.benefits.qRole}</div>
-                </div>
+            {/* Pro */}
+            <div style={{ background: "var(--bg-deep)", backgroundImage: "radial-gradient(500px 300px at 100% 0%, oklch(0.5 0.18 275 / 0.5), transparent 60%), linear-gradient(160deg, var(--bg-deep), oklch(0.10 0.03 240))", borderRadius: "var(--radius-lg)", padding: 36, color: "white", position: "relative", boxShadow: "0 24px 60px rgba(15,30,50,.2)" }}>
+              <div style={{ position: "absolute", top: -12, right: 24, background: "oklch(0.7 0.13 165)", color: "oklch(0.18 0.04 240)", padding: "4px 12px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                {t.pricing.badge}
               </div>
-              <div className="bsc-stats">
-                <div className="bsc-stat"><div className="num">{t.benefits.stat1n}</div><div className="lbl">{t.benefits.stat1l}</div></div>
-                <div className="bsc-stat"><div className="num">{t.benefits.stat2n}</div><div className="lbl">{t.benefits.stat2l}</div></div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{t.pricing.pro_name}</h3>
+              <p style={{ fontSize: 14, color: "oklch(0.78 0.02 245)", marginBottom: 20 }}>{t.pricing.pro_tag}</p>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 24 }}>
+                <span style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em" }}>RM 149.90</span>
+                <span style={{ fontSize: 14, color: "oklch(0.78 0.02 245)" }}>/ {lang === "bm" ? "bulan" : "month"}</span>
               </div>
+              <button type="button" className="btn" style={{ width: "100%", marginBottom: 24, justifyContent: "center", background: "white", color: "var(--ink)" }} onClick={() => goToSignup()}>
+                {t.pricing.pro_cta}
+              </button>
+              <ul style={{ listStyle: "none", display: "grid", gap: 12, fontSize: 14 }}>
+                {[t.pricing.pro_f1, t.pricing.pro_f2, t.pricing.pro_f3, t.pricing.pro_f4, t.pricing.pro_f5, t.pricing.pro_f6, t.pricing.pro_f7].map((f) => (
+                  <li key={f} style={{ display: "flex", gap: 10, alignItems: "flex-start", color: "oklch(0.92 0.02 245)" }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="oklch(0.7 0.13 165)" strokeWidth="3" style={{ flexShrink: 0, marginTop: 2 }}><polyline points="20 6 9 17 4 12" /></svg>
+                    {f}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
+          <p className="pricing-note">{t.pricing.note}</p>
         </div>
       </section>
 
-      {/* =================== PRICING =================== */}
-      <section className="pricing" id="pricing">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.pricing.eyebrow}</span>
-            <h2>Simple pricing for travel agencies</h2>
-            <p className="lead" style={{ marginTop: 14 }}>Start free. Upgrade as you grow. No hidden fees.</p>
-          </div>
-        </div>
-        <PricingSection />
-        <p style={{ textAlign: "center", fontSize: 13, color: "var(--ink-4)", marginTop: 32 }}>
-          No credit card required &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; SST compliant
-        </p>
-      </section>
-
-      {/* =================== TESTIMONIALS =================== */}
-      <section className="testi">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.testi.eyebrow}</span>
-            <h2>{t.testi.title}</h2>
-          </div>
-          <div className="testi-grid">
-            {[
-              { q: t.testi.q1, n: t.testi.n1, r: t.testi.r1, av: "AR", cls: "" },
-              { q: t.testi.q2, n: t.testi.n2, r: t.testi.r2, av: "EH", cls: "g" },
-              { q: t.testi.q3, n: t.testi.n3, r: t.testi.r3, av: "MC", cls: "w" },
-            ].map((tc) => (
-              <div className="testi-card" key={tc.n}>
-                <div className="stars">{[0,1,2,3,4].map((i) => <Star key={i} />)}</div>
-                <blockquote>{tc.q}</blockquote>
-                <div className="who">
-                  <div className={`av${tc.cls ? ` ${tc.cls}` : ""}`}>{tc.av}</div>
-                  <div><div className="name">{tc.n}</div><div className="role">{tc.r}</div></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =================== FAQ =================== */}
-      <section className="faq" id="faq">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t.faq.eyebrow}</span>
-            <h2>{t.faq.title}</h2>
+      {/* ══════════════════════════════════════ FAQ ════════════════════════════════════════ */}
+      <section id="faq" className="section" style={{ background: "var(--bg-soft)" }}>
+        <div className="container" style={{ maxWidth: 820 }}>
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />{t.faq.eyebrow}</span>
+            <h2 className="section-title">{t.faq.title}</h2>
           </div>
           <div className="faq-list">
-            {[
-              { q: t.faq.q1, a: t.faq.a1 },
-              { q: t.faq.q2, a: t.faq.a2 },
-              { q: t.faq.q3, a: t.faq.a3 },
-              { q: t.faq.q4, a: t.faq.a4 },
-              { q: t.faq.q5, a: t.faq.a5 },
-            ].map((item, i) => (
-              <details key={item.q} className="faq-item" open={i === 0 || undefined}>
-                <summary>
-                  <span>{item.q}</span>
-                  <span className="faq-icon"><PlusIcon /></span>
-                </summary>
-                <div className="faq-body">{item.a}</div>
-              </details>
-            ))}
+            <FAQItem q={t.faq.q1} a={t.faq.a1} />
+            <FAQItem q={t.faq.q2} a={t.faq.a2} />
+            <FAQItem q={t.faq.q3} a={t.faq.a3} />
+            <FAQItem q={t.faq.q4} a={t.faq.a4} />
+            <FAQItem q={t.faq.q5} a={t.faq.a5} />
           </div>
         </div>
       </section>
 
-      {/* =================== FINAL CTA =================== */}
+      {/* ══════════════════════════════════════ FINAL CTA ══════════════════════════════════ */}
       <section className="final-cta">
-        <div className="container final-cta-inner">
+        <div className="final-cta-card">
           <h2>{t.cta.title}</h2>
           <p>{t.cta.lead}</p>
-          <div className="hero-ctas" style={{ justifyContent: "center" }}>
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => goToSignup()}>
-              <span>{t.cta.btn1}</span>
+          <div className="btns">
+            <button type="button" className="btn btn-blue btn-lg" onClick={() => goToSignup()}>
+              {t.cta.btn1}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </button>
             <button type="button" className="btn btn-ghost btn-lg" onClick={goToLogin}>{t.cta.btn2}</button>
           </div>
-          <div style={{ marginTop: 18, fontSize: 13, color: "oklch(0.85 0.02 230)" }}>{t.cta.note}</div>
+          <p className="note">{t.cta.note}</p>
         </div>
       </section>
 
-      {/* =================== FOOTER =================== */}
+      {/* ══════════════════════════════════════ FOOTER ═════════════════════════════════════ */}
       <footer className="footer">
         <div className="container">
           <div className="footer-grid">
             <div className="footer-brand">
-              <a className="brand" href="#">
-                <div className="logo">T</div>
-                <div className="brand-text">
-                  <span className="brand-name">TAMS</span>
-                  <span className="brand-tag">Travel Agency Management System</span>
-                </div>
+              <a href="#" className="brand footer-brand">
+                <span className="brand-mark">T</span>
+                <span>TAMS</span>
               </a>
-              <p>{t.footer.tag}</p>
+              <p className="footer-tag">{t.footer.tag}</p>
             </div>
             <div className="footer-col">
-              <h4>{t.footer.product}</h4>
+              <h5>{t.footer.product}</h5>
               <ul>
                 <li><a href="#features">{t.nav.features}</a></li>
                 <li><a href="#pricing">{t.nav.pricing}</a></li>
-                <li><a href="#how">{t.nav.how}</a></li>
+                <li><a href="#showcase">{t.nav.how}</a></li>
                 <li><a href="#">{t.footer.changelog}</a></li>
               </ul>
             </div>
             <div className="footer-col">
-              <h4>{t.footer.company}</h4>
+              <h5>{t.footer.company}</h5>
               <ul>
                 <li><a href="#">{t.footer.about}</a></li>
                 <li><a href="#">{t.footer.customers}</a></li>
-                <li><a href="#">{t.footer.contact}</a></li>
                 <li><a href="#">{t.footer.careers}</a></li>
+                <li><a href="#">{t.footer.contact}</a></li>
               </ul>
             </div>
             <div className="footer-col">
-              <h4>{t.footer.resources}</h4>
+              <h5>{t.footer.resources}</h5>
               <ul>
                 <li><a href="#">{t.footer.help}</a></li>
                 <li><a href="#">{t.footer.sst}</a></li>
@@ -971,20 +1086,21 @@ export default function HomePage() {
                 <li><a href="#">{t.footer.status}</a></li>
               </ul>
             </div>
+            <div className="footer-col">
+              <h5>{t.footer.lang}</h5>
+              <div className="lang-toggle" style={{ display: "inline-flex" }}>
+                <button type="button" className={lang === "en" ? "active" : ""} onClick={() => switchLang("en")}>EN</button>
+                <button type="button" className={lang === "bm" ? "active" : ""} onClick={() => switchLang("bm")}>BM</button>
+              </div>
+            </div>
           </div>
+
           <div className="footer-bottom">
-            <div>{t.footer.copy}</div>
-            <div className="right">
+            <span>{t.footer.copy}</span>
+            <div className="legal">
               <a href="#">{t.footer.privacy}</a>
               <a href="#">{t.footer.terms}</a>
               <a href="#">{t.footer.security}</a>
-              <span className="footer-lang">
-                <span>{t.footer.lang}</span>
-                <span className="lang-switch">
-                  <button type="button" className={lang === "en" ? "active" : ""} onClick={() => switchLang("en")}>EN</button>
-                  <button type="button" className={lang === "bm" ? "active" : ""} onClick={() => switchLang("bm")}>BM</button>
-                </span>
-              </span>
             </div>
           </div>
         </div>
