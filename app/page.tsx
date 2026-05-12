@@ -411,7 +411,7 @@ export default function HomePage() {
             <div className="hero-shot-frame">
               <div className="hero-shot-tb">
                 <div className="dots"><span /><span /><span /></div>
-                <div className="url">app.tams.my / dashboard</div>
+                <div className="url">app.usetams.com / dashboard</div>
               </div>
               <Image
                 src="/images/TAMS-DASHBOARD.png"
@@ -669,7 +669,7 @@ export default function HomePage() {
               <div className="shot-frame">
                 <div className="shot-chrome">
                   <div className="dots"><span /><span /><span /></div>
-                  <div className="url-bar">app.tams.my / bookings</div>
+                  <div className="url-bar">app.usetams.com / bookings</div>
                 </div>
                 <div className="shot-body" style={{ padding: "16px 0 0" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 12px" }}>
@@ -715,7 +715,7 @@ export default function HomePage() {
               <div className="shot-frame">
                 <div className="shot-chrome">
                   <div className="dots"><span /><span /><span /></div>
-                  <div className="url-bar">app.tams.my / packages</div>
+                  <div className="url-bar">app.usetams.com / packages</div>
                 </div>
                 <div className="shot-pkg-grid">
                   {[
@@ -757,7 +757,7 @@ export default function HomePage() {
               <div className="shot-frame doc">
                 <div className="shot-chrome">
                   <div className="dots"><span /><span /><span /></div>
-                  <div className="url-bar">app.tams.my / invoices / INV-2026-1042</div>
+                  <div className="url-bar">app.usetams.com / invoices / INV-2026-1042</div>
                 </div>
                 <div className="shot-invoice">
                   <div className="shot-inv-head">
@@ -809,7 +809,7 @@ export default function HomePage() {
               <div className="shot-frame doc">
                 <div className="shot-chrome">
                   <div className="dots"><span /><span /><span /></div>
-                  <div className="url-bar">app.tams.my / confirmations / BC-2026-0089</div>
+                  <div className="url-bar">app.usetams.com / confirmations / BC-2026-0089</div>
                 </div>
                 <div className="shot-confirm">
                   <div className="shot-confirm-head">

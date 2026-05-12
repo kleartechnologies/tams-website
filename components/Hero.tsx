@@ -66,7 +66,7 @@ export default function Hero() {
           <div className="dash-showcase">
             <div className="dash-chrome">
               <div className="lights"><span /><span /><span /></div>
-              <div className="url">app.tams.my / dashboard</div>
+              <div className="url">app.usetams.com / dashboard</div>
             </div>
             <div className="dash-img-wrap">
               <Image

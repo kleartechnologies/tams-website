@@ -79,7 +79,7 @@ export default function PreviewTabs() {
             <div className="dash" style={{ borderRadius: 0, border: 0, boxShadow: "none" }}>
               <div className="dash-chrome">
                 <div className="lights"><span /><span /><span /></div>
-                <div className="url">app.tams.my / dashboard</div>
+                <div className="url">app.usetams.com / dashboard</div>
               </div>
               <div className="dash-body" style={{ minHeight: 460 }}>
                 <aside className="dash-sidebar">

@@ -11,6 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://usetams.com"),
   title: "TAMS — Travel Agency Management System",
   description:
     "Manage bookings, payments, customers and reports in one system. Built for Malaysian travel agencies with SST support.",
@@ -22,10 +23,19 @@ export const metadata: Metadata = {
     "booking management",
     "travel agency software Malaysia",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "TAMS — Travel Agency Management System",
     description: "Manage your travel agency smarter. Bookings, payments, invoices and reports in one place.",
     type: "website",
+    url: "https://usetams.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TAMS — Travel Agency Management System",
+    description: "Manage your travel agency smarter. Bookings, payments, invoices and reports in one place.",
   },
 };
 
