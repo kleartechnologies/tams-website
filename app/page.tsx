@@ -971,7 +971,7 @@ export default function HomePage() {
               <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{t.pricing.basic_name}</h3>
               <p style={{ fontSize: 14, color: "var(--ink-3)", marginBottom: 20 }}>{t.pricing.basic_tag}</p>
               <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 24 }}>
-                <span style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em" }}>RM 99.90</span>
+                <span style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em" }}>RM 99</span>
                 <span style={{ fontSize: 14, color: "var(--ink-3)" }}>/ {lang === "bm" ? "bulan" : "month"}</span>
               </div>
               <button type="button" className="btn btn-ghost" style={{ width: "100%", marginBottom: 24, justifyContent: "center" }} onClick={() => goToSignup()}>
@@ -995,7 +995,7 @@ export default function HomePage() {
               <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{t.pricing.pro_name}</h3>
               <p style={{ fontSize: 14, color: "oklch(0.78 0.02 245)", marginBottom: 20 }}>{t.pricing.pro_tag}</p>
               <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 24 }}>
-                <span style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em" }}>RM 149.90</span>
+                <span style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em" }}>RM 199</span>
                 <span style={{ fontSize: 14, color: "oklch(0.78 0.02 245)" }}>/ {lang === "bm" ? "bulan" : "month"}</span>
               </div>
               <button type="button" className="btn" style={{ width: "100%", marginBottom: 24, justifyContent: "center", background: "white", color: "var(--ink)" }} onClick={() => goToSignup()}>

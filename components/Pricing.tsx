@@ -29,7 +29,7 @@ export default function Pricing() {
             <p className="plan-tag">{p.basic.tag}</p>
             <div className="plan-price">
               <span className="cur">RM</span>
-              <span className="amt">99.90</span>
+              <span className="amt">99</span>
               <span className="per">{p.basic.period}</span>
             </div>
             <div className="plan-divider" />
@@ -62,7 +62,7 @@ export default function Pricing() {
             <p className="plan-tag">{p.pro.tag}</p>
             <div className="plan-price">
               <span className="cur">RM</span>
-              <span className="amt">149.90</span>
+              <span className="amt">199</span>
               <span className="per">{p.pro.period}</span>
             </div>
             <div className="plan-divider" />
